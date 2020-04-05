@@ -19,6 +19,7 @@ import mx.mexicocovid19.plataforma.model.entity.Ayuda;
 import mx.mexicocovid19.plataforma.model.entity.Ciudadano;
 import mx.mexicocovid19.plataforma.model.entity.FeedBack;
 import mx.mexicocovid19.plataforma.model.entity.User;
+import mx.mexicocovid19.plataforma.model.repository.CiudadanoRepository;
 import mx.mexicocovid19.plataforma.model.repository.FeedBackRepository;
 import mx.mexicocovid19.plataforma.service.helper.AyudaRateRegisterEvaluationServiceHelper;
 import mx.mexicocovid19.plataforma.service.helper.GroseriasHelper;
@@ -33,6 +34,10 @@ public class DefaultFeedBackService implements FeedBackService{
 	
     @Autowired
     private AyudaRateRegisterEvaluationServiceHelper ayudaRateRegisterEvaluation;
+    
+    @Autowired
+    private CiudadanoRepository ciudadanoRepository;
+    
 	
 	@Override
 	public List<FeedBack> listAllFeedback() {
@@ -42,39 +47,28 @@ public class DefaultFeedBackService implements FeedBackService{
 	@Override
 	@Transactional
 	public FeedBack createFeedBack(FeedBack feedBack, String username) throws PMCException {
-	     try {
-	        	
-	    		// Valida el numero de ayudas que ha registrado el usuario firmado
-	    		if ( ayudaRateRegisterEvaluation.isMaximumRequestsPerHourExceeded(username) ) {
-	    			throw new PMCException(ErrorEnum.ERR_MAX_AYUDA, "DefaultAyudaService");
-	    		}
-	    		
-	    		
-	        	User user = new User();
-	        	user.setUsername(username);
-	        	Ciudadano ciudadano = ciudadanoRepository.findByUser(user);
-	        	GeoLocation ubicacion = geoLocationRepository.save(ayuda.getUbicacion());
-	        	ayuda.setUbicacion(ubicacion);
-	        	ayuda.setCiudadano(ciudadano);
-	        	
-	        	if ( !GroseriasHelper.evaluarTexto(ayuda.getDescripcion()) ) {
-	        		
-	        		Ayuda ayudaTmp = ayudaRepository.save(ayuda);
+	     // Valida el numero de ayudas que ha registrado el usuario firmado
+		if ( ayudaRateRegisterEvaluation.isMaximumRequestsPerHourExceeded(username) ) {
+			throw new PMCException(ErrorEnum.ERR_MAX_AYUDA, "DefaultAyudaService");
+		}
+		
+		
+		User user = new User();
+		user.setUsername(username);
+		Ciudadano ciudadano = ciudadanoRepository.findByUser(user);
+		
+		
+		if ( !GroseriasHelper.evaluarTexto(feedBack.getDescripcion()) ) {
+			
+			FeedBack feedbackTmp = feedbackrepo.save(feedBack);
 
-	        		// Envia notificacion por correo electronic
-	        		Map<String, Object> props = new HashMap<>();
-	        		props.put("nombre", ayuda.getCiudadano().getNombreCompleto());
-	        		TipoEmailEnum tipoEmail = ayuda.getOrigenAyuda() == OrigenAyuda.SOLICITA ? SOLICITA_AYUDA : OFRECE_AYUDA;
-	                mailService.send(ciudadano.getUser().getUsername(), ciudadano.getUser().getUsername(), props, tipoEmail);
+			// TODO Envia notificacion por correo electronic
+			
 
-	        		return ayudaTmp;	
-	        	} else {        		
-	        		throw new PMCException(ErrorEnum.ERR_LENGUAJE_SOEZ, "DefaultAyudaService");	
-	        	}			
-			} catch (MessagingException e) {
-				log.info(e.getMessage());
-				throw new PMCException(ErrorEnum.ERR_GENERICO, "DefaultAyudaService", e.getMessage());
-			}
+			return feedbackTmp;	
+		} else {        		
+			throw new PMCException(ErrorEnum.ERR_LENGUAJE_SOEZ, "DefaultAyudaService");	
+		}
 	}
 
 }
