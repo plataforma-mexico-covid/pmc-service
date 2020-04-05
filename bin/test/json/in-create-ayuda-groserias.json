@@ -1,0 +1,31 @@
+{
+    "id": 6,
+    "descripcion": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor putos incididunt ut labore et dolore magna aliqua.",
+    "ciudadano": {
+        "id": 2,
+        "nombre": "Jose",
+        "paterno": "Soto",
+        "materno": "Torres",
+        "contactos": null
+    },
+    "ubicacion": {
+        "id": 6,
+        "calle": "VIENA",
+        "noExterior": "123",
+        "noInterior": "123",
+        "colonia": "Col Juarez",
+        "codigoPostal": "06600",
+        "idMunicipio": 2,
+        "municipio": null,
+        "idEstado": 13,
+        "estado": null,
+        "longitude": -99.15772,
+        "latitude": 19.430268
+    },
+    "tipoAyuda": {
+        "id": 1,
+        "nombre": null
+    },
+    "origenAyuda": "OFRECE",
+    "fechaRegistro": "30/03/2020 13:00:00"
+}
