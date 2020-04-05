@@ -3,6 +3,7 @@ package mx.mexicocovid19.plataforma.service;
 import static mx.mexicocovid19.plataforma.service.TipoEmailEnum.RECUPERACION_PASSWORD;
 import static mx.mexicocovid19.plataforma.service.TipoEmailEnum.REGISTRO_USUARIO;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 
+import mx.mexicocovid19.plataforma.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -143,12 +145,18 @@ public class DefaultUserService implements UserService {
     @Override
     @Transactional
     public void confirmUser(final String token) throws Exception {
-        
         UserToken userToken = userServiceHelper.getUserToken(token);
+        if ( userToken == null || userToken.isValidated() || DateUtil.isExpired(userToken.getExpirationDate())) {
+            throw new PMCException(ErrorEnum.ERR_CONFIRMAR_EMAIL, getClass().getName(), "Token invalido.");
+        }
         userToken.getUser().setValidated(true);
         userRepository.save(userToken.getUser());
         userToken.setValidated(true);
         userTokenRepository.save(userToken);
+    }
+
+    private boolean isExpired(final LocalDateTime expirationDate) {
+        return LocalDateTime.now().isAfter(expirationDate);
     }
 
 

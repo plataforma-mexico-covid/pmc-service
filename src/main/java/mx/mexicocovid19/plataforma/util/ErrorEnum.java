@@ -17,6 +17,8 @@ public enum ErrorEnum {
 	ERR_REGISTRO_CIUDADANO("ERR-005", "Es necesario especificar .", "", ErrorConst.WARNING, ""),
 	
 	ERR_RECUPERACION_PASSWORD("ERR-006", "Proceso de recuperacion", "", ErrorConst.ERROR, ""),
+
+	ERR_CONFIRMAR_EMAIL("ERR-007", "Proceso de confirmacion de email", "", ErrorConst.ERROR, ""),
 	
 	/** Errores de autorizacion */	
 	ERR_AUTH_TOKEN_REQUERIDO("ERR-AUTH-001", "Token requerido", "", ErrorConst.ERROR, "");

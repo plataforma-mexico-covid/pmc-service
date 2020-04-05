@@ -1,9 +1,7 @@
 package mx.mexicocovid19.plataforma.service.helper;
 
-import static mx.mexicocovid19.plataforma.util.DateUtil.convertToLocalDateTimeViaMilisecond;
+import static mx.mexicocovid19.plataforma.util.DateUtil.isExpired;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +39,6 @@ public class DefaultUserServiceHelper {
         
         return userToken;
 	}
-	
-    private boolean isExpired(final Date expirationDate) {
-        return LocalDateTime.now().isAfter(convertToLocalDateTimeViaMilisecond(expirationDate));
-    }
 	
 	public void changePasswordValidation(User username, String password, String confirmation) throws PMCException {
 		

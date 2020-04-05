@@ -37,6 +37,10 @@ public final class DateUtil {
         return LocalDateTime.parse(date, df);
     }
 
+	public static boolean isExpired(final Date expirationDate) {
+		return LocalDateTime.now().isAfter(convertToLocalDateTimeViaMilisecond(expirationDate));
+	}
+
 	public static LocalDateTime convertToLocalDateTimeViaMilisecond(final Date dateToConvert) {
     	return Instant.ofEpochMilli(dateToConvert.getTime())
 				.atZone(ZoneId.of(TIMEZONE_MEXICO))
