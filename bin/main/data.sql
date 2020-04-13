@@ -131,4 +131,4 @@ INSERT INTO PETICION (ID, AYUDA_ID, CIUDADANO_ID, FECHA_PETICION) VALUES
 (1, 1, 2, TIMESTAMP '2020-03-22 00:00:00.000');
 
 INSERT INTO FEEDBACK (DESCRIPCION, FECHA_CREACION, CIUDADANO_ID, PETICION_ID)
-VALUES ('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.' , TIMESTAMP '2020-03-22 00:00:00.000' , 1 , 1);
+VALUES ('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec' , TIMESTAMP '2020-03-22 00:00:00.000' , 1 , 1);

@@ -1,0 +1,32 @@
+{
+  "ciudadano": {
+    "contactos": [
+      {
+        "contacto": "5536762551",
+        "tipoContacto": "TELEFONO_FIJO"
+      }
+    ],
+    "materno": "ANGELES",
+    "nombre": "MARIO",
+    "paterno": "RIVERA"
+  },
+  "descripcion": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "fechaRegistro": "30/03/2020 13:00:00",
+  "origenAyuda": "OFRECE",
+  "tipoAyuda": {
+  	"id": 1
+  },
+  "ubicacion": {
+    "calle": "VIENA",
+    "codigoPostal": "06600",
+    "colonia": "Col Juarez",
+    "estado": "HIDALGO",
+    "idEstado": 13,
+    "idMunicipio": 2,
+    "latitude": 19.430268,
+    "longitude": -99.157720,
+    "municipio": "273",
+    "noExterior": "123",
+    "noInterior": "123"
+  }
+}
