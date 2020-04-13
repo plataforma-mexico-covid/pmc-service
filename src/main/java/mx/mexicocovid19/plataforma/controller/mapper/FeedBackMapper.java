@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import mx.mexicocovid19.plataforma.controller.dto.FeedBackDTO;
+import mx.mexicocovid19.plataforma.model.entity.Ciudadano;
 import mx.mexicocovid19.plataforma.model.entity.FeedBack;
+import mx.mexicocovid19.plataforma.model.entity.Peticion;
 import mx.mexicocovid19.plataforma.util.DateUtil;
 
 public class FeedBackMapper {
@@ -13,8 +15,9 @@ public class FeedBackMapper {
         final FeedBackDTO feedbackDTO = new FeedBackDTO();
         
         feedbackDTO.setId(feedback.getId());
-        feedbackDTO.setCiudadano(CiudadanoMapper.from(feedback.getCiudadano()));
-        feedbackDTO.setDescripcion(feedback.getDescripcion());
+        feedbackDTO.setCiudadano_id(feedback.getCiudadano().getId());
+        feedbackDTO.setPeticion_id(feedback.getPeticion().getId());
+        feedbackDTO.setMensaje(feedback.getDescripcion());
         feedbackDTO.setFechaCreacion(DateUtil.formatDTO(feedback.getFechaCreacion()));
      
         return feedbackDTO;
@@ -23,8 +26,13 @@ public class FeedBackMapper {
     public static FeedBack from(final FeedBackDTO feedbackDTO) {
         final FeedBack feedBack = new FeedBack();
         
-        feedBack.setDescripcion(feedbackDTO.getDescripcion());
-        feedBack.setCiudadano(CiudadanoMapper.from(feedbackDTO.getCiudadano()));
+        feedBack.setDescripcion(feedbackDTO.getMensaje());
+        Ciudadano ciudadano = new Ciudadano();
+        ciudadano.setId(feedbackDTO.getCiudadano_id());
+        feedBack.setCiudadano(ciudadano);
+        Peticion peticion = new Peticion();
+        peticion.setId(feedbackDTO.getPeticion_id());
+        feedBack.setPeticion(peticion);
         feedBack.setFechaCreacion(DateUtil.parseDTO(feedbackDTO.getFechaCreacion()));
         
         return feedBack;

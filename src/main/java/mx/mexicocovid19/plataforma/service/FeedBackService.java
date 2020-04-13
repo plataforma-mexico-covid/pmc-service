@@ -9,5 +9,6 @@ public interface FeedBackService {
 	
 	public List<FeedBack> listAllFeedback();
 	FeedBack createFeedBack(final FeedBack feedBack, final String username) throws PMCException;
+	public void eliminar(Integer id);
 
 }

@@ -8,8 +8,9 @@ import lombok.Setter;
 public class FeedBackDTO {
 	
 	 private Integer id;
-	 private CiudadanoDTO ciudadano;
-	 private String descripcion;
+	 private Integer ciudadano_id;
+	 private Integer peticion_id;
+	 private String mensaje;
 	 private String fechaCreacion;
 
 }

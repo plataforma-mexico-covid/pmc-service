@@ -14,6 +14,8 @@ public class GeoLocation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
+    @Column(name = "DIRECCION")
+    private String direccion;
     @Column(name = "CALLE")
     private String calle;
     @Column(name = "NO_EXTERIOR")
@@ -25,7 +27,7 @@ public class GeoLocation {
     @Column(name = "CODIGO_POSTAL")
     private String codigoPostal;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "MUNICIPALITY_ID", nullable = false)
+    @JoinColumn(name = "MUNICIPALITY_ID", nullable = true)
     private Municipality municipality;
     @Column(name = "LONGITUDE", precision=12, scale=8)
     private Double longitude;

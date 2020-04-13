@@ -14,4 +14,5 @@ public class AyudaDTO {
     private TipoAyudaDTO tipoAyuda;
     private OrigenAyuda origenAyuda;
     private String fechaRegistro;
+    private Boolean isUserLogIn;
 }

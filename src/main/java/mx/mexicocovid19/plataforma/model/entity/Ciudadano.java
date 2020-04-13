@@ -23,7 +23,7 @@ public class Ciudadano {
     @Column(name = "MATERNO")
     private String materno;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "USERNAME", nullable = false)
+    @JoinColumn(name = "USERNAME", nullable = true)
     private User user;
     @Column(name = "ACTIVE")
     private Boolean active;

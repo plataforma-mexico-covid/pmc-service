@@ -29,6 +29,9 @@ public class Ayuda {
     @Enumerated(EnumType.STRING)
     @Column(name = "ORIGEN_AYUDA")
     private OrigenAyuda origenAyuda;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ESTATUS_AYUDA")
+    private EstatusAyuda estatusAyuda;
     @Column(name = "FECHA_REGISTRO")
     private LocalDateTime fechaRegistro;
     @Column(name = "ACTIVE")

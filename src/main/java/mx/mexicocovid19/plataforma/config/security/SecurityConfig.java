@@ -57,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, ApiController.API_PATH_PRIVATE + "/**").authenticated()
                 .antMatchers(HttpMethod.PUT, ApiController.API_PATH_PRIVATE + "/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, ApiController.API_PATH_PRIVATE + "/**").authenticated()
+                .antMatchers(HttpMethod.POST, ApiController.API_PATH_PRIVATE + "/ayuda_ciudadano").access("hasRole('VOLUNTARY')")
                 .antMatchers("/h2-console/**").permitAll()
                 .and()
             .csrf()

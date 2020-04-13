@@ -25,14 +25,14 @@ public class FeedBack {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Integer id;
-
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CIUDADANO_ID", nullable = false)
 	private Ciudadano ciudadano;
-
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "PETICION_ID", nullable = false)
+	private Peticion peticion;
 	@Column(name = "DESCRIPCION")
 	private String descripcion;
-	
 	@Column(name = "FECHA_CREACION")
     private LocalDateTime fechaCreacion;
 	

@@ -10,8 +10,8 @@ spring.profiles.include: security, mailoff
 
 plataforma:
   ayuda-service:
-    hoursToWaitRegister: 1
-    registerAvailablePeruser: 2
+    hoursToWaitRegister: ${HOURS_WAIT_REGISTER}
+    registerAvailablePeruser: ${REGISTER_AVAILABLE_PERUSER}
   url.confirm.token: ${URL_CONFIRM_TOKEN}
   url.change.password: ${URL_CHANGE_PASSWORD}
 
@@ -55,8 +55,12 @@ spring:
       enabled: true
       path: /h2-console
 
-plataforma.url.confirm.token: http://localhost:4200/#/confirmacion
-plataforma.url.change.password: http://localhost:8090/api/v1/public/users/change_password
+plataforma:
+  ayuda-service:
+    hoursToWaitRegister: 1
+    registerAvailablePeruser: 10
+  url.confirm.token: http://localhost:4200/#/confirmacion
+  url.change.password: http://localhost:4200/#/recuperar
 ---
 spring:
   profiles: mailon
@@ -70,7 +74,7 @@ mail:
   to.default: notificacion@plataformacovid19.mx
   subject.default: Notificacion PMC
   transport.protocol: smtp
-  debug: on
+  debug: off
   smtp:
     auth: true
     starttls.enable: true

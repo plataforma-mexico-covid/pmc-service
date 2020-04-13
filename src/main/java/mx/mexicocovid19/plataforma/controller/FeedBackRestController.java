@@ -4,12 +4,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,9 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import mx.mexicocovid19.plataforma.ApiController;
 import mx.mexicocovid19.plataforma.config.security.JwtTokenUtil;
-import mx.mexicocovid19.plataforma.controller.dto.AyudaDTO;
 import mx.mexicocovid19.plataforma.controller.dto.FeedBackDTO;
-import mx.mexicocovid19.plataforma.controller.mapper.AyudaMapper;
 import mx.mexicocovid19.plataforma.controller.mapper.FeedBackMapper;
 import mx.mexicocovid19.plataforma.exception.PMCException;
 import mx.mexicocovid19.plataforma.model.entity.FeedBack;
@@ -60,5 +61,21 @@ public class FeedBackRestController {
         
         return response;
     }
+    
+   
+	@ResponseBody
+	@DeleteMapping(value = { ApiController.API_PATH_PRIVATE + "/feedback/{id}" }, produces = {
+			"application/json;charset=UTF-8" })
+	public ResponseEntity<Void> deleteFeedback(@PathVariable Integer id) {
+
+		try {
+			feedBackService.eliminar(id);
+			return ResponseEntity.noContent().build();
+
+		} catch (ResourceNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+    
 	
 }

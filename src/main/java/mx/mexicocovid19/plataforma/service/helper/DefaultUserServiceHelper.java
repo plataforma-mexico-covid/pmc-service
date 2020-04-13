@@ -55,13 +55,18 @@ public class DefaultUserServiceHelper {
     		throw new PMCException(ErrorEnum.ERR_RECUPERACION_PASSWORD, getClass().getName(), "Especificar la confirmacion");
     	}
 		
+    	if ( !PasswordHelper.passwordIsValid(password) ) {
+			throw new PMCException(ErrorEnum.ERR_INVALID_PASSWORD, getClass().getName());
+    	}
+    	
+    	if ( !PasswordHelper.passwordIsValid(confirmation) ) {
+			throw new PMCException(ErrorEnum.ERR_INVALID_PASSWORD, getClass().getName());
+    	}
+    	
     	if ( !confirmation.equals(password) ) {
     		throw new PMCException(ErrorEnum.ERR_RECUPERACION_PASSWORD, getClass().getName(), "Password y cofirmacion deben ser identicos.");
     	}
     	
-    	if ( !PasswordHelper.passwordIsValid(password) ) {
-			throw new PMCException(ErrorEnum.ERR_INVALID_PASSWORD, getClass().getName());
-    	}
 	}
     
 	public void validaRegistroUsuario( final UserDTO userDTO ) throws PMCException {

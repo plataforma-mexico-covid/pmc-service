@@ -14,13 +14,14 @@ public class UserRole{
 	@ManyToOne
 	@JoinColumn(name = "username", nullable = false)
 	private User user;
+	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false, length = 45)
-	private String role;
+	private Role role;
  
 	public UserRole() {
 	}
  
-	public UserRole(User user, String role) {
+	public UserRole(User user, Role role) {
 		this.user = user;
 		this.role = role;
 	}
@@ -41,11 +42,11 @@ public class UserRole{
 		this.user = user;
 	}
  
-	public String getRole() {
+	public Role getRole() {
 		return this.role;
 	}
  
-	public void setRole(String role) {
+	public void setRole(Role role) {
 		this.role = role;
 	}
 

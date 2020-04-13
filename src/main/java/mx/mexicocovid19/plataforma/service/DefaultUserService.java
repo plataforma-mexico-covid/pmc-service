@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 
+import mx.mexicocovid19.plataforma.model.entity.*;
 import mx.mexicocovid19.plataforma.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,11 +22,6 @@ import lombok.extern.log4j.Log4j2;
 import mx.mexicocovid19.plataforma.controller.dto.ChangePasswordDTO;
 import mx.mexicocovid19.plataforma.controller.dto.UserDTO;
 import mx.mexicocovid19.plataforma.exception.PMCException;
-import mx.mexicocovid19.plataforma.model.entity.Ciudadano;
-import mx.mexicocovid19.plataforma.model.entity.CiudadanoContacto;
-import mx.mexicocovid19.plataforma.model.entity.User;
-import mx.mexicocovid19.plataforma.model.entity.UserRole;
-import mx.mexicocovid19.plataforma.model.entity.UserToken;
 import mx.mexicocovid19.plataforma.model.repository.CiudadanoContactoRepository;
 import mx.mexicocovid19.plataforma.model.repository.CiudadanoRepository;
 import mx.mexicocovid19.plataforma.model.repository.UserRepository;
@@ -92,7 +88,7 @@ public class DefaultUserService implements UserService {
     private void sendMailRecoveryPasswordToken(UserToken userToken, String urlConfirmToken, String nombre) throws MessagingException {
         Map<String, Object> props = new HashMap<>();
         props.put("nombre", nombre);
-        props.put("link", urlConfirmToken + "?token=" + userToken.getToken());
+        props.put("link", urlConfirmToken + "/" + userToken.getToken());
         mailService.send(userToken.getUser().getUsername(), userToken.getUser().getUsername(), props, RECUPERACION_PASSWORD);
     }
     
@@ -100,7 +96,7 @@ public class DefaultUserService implements UserService {
     private void sendMailToken(UserToken userToken, String urlConfirmToken, String nombre) throws MessagingException {
         Map<String, Object> props = new HashMap<>();
         props.put("nombre", nombre);
-        props.put("link", urlConfirmToken + "?token=" + userToken.getToken());
+        props.put("link", urlConfirmToken + "/" + userToken.getToken());
 
         mailService.send(userToken.getUser().getUsername(), userToken.getUser().getUsername(), props, REGISTRO_USUARIO);
     }
@@ -117,7 +113,7 @@ public class DefaultUserService implements UserService {
 
     private UserRole getUserRole(final User user) {
         final UserRole userRole = new UserRole();
-        userRole.setRole("CITIZEN");
+        userRole.setRole(Role.CITIZEN);
         userRole.setUser(user);
         return userRole;
     }

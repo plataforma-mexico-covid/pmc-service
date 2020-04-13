@@ -16,6 +16,18 @@ public class CiudadanoContactoMapper {
         return ciudadanoContactoDTO;
     }
 
+    public static CiudadanoContacto from(final CiudadanoContactoDTO ciudadanoContactoDTO) {
+        final CiudadanoContacto ciudadanoContacto = new CiudadanoContacto();
+        ciudadanoContacto.setId(ciudadanoContactoDTO.getId());
+        ciudadanoContacto.setTipoContacto(ciudadanoContactoDTO.getTipoContacto());
+        ciudadanoContacto.setContacto(ciudadanoContactoDTO.getContacto());
+        return ciudadanoContacto;
+    }
+
+    public static Set<CiudadanoContacto> from(final List<CiudadanoContactoDTO> ciudadanoContactosDTO) {
+        return ciudadanoContactosDTO.stream().map(CiudadanoContactoMapper::from).collect(Collectors.toSet());
+    }
+
     public static List<CiudadanoContactoDTO> from(final Set<CiudadanoContacto> ciudadanoContactos) {
         return ciudadanoContactos.stream().map(CiudadanoContactoMapper::from).collect(Collectors.toList());
     }

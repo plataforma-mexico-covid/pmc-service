@@ -48,11 +48,11 @@ public class AyudaRestController {
     public List<AyudaDTO> readAyudas(@RequestParam(value = "origenAyuda", defaultValue = "AMBOS") final String origenAyuda,
                                      @RequestParam(value = "longitude") final Double longitude,
                                      @RequestParam(value = "latitude") final Double latitude,
-                                     @RequestParam(value = "kilometers") final Integer kilometers) {
-    	
-    	
-    	
-        return AyudaMapper.from(ayudaService.readAyudas(origenAyuda, longitude, latitude, kilometers));
+                                     @RequestParam(value = "kilometers") final Integer kilometers,
+                                     HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        return AyudaMapper.fromAndMarkByUser(ayudaService.readAyudas(origenAyuda, longitude, latitude, kilometers), username);
     }
 
     @ResponseBody
@@ -66,6 +66,17 @@ public class AyudaRestController {
 		Ayuda createAyuda = ayudaService.createAyuda(AyudaMapper.from(ayudaDTO), username);
 		response = new ResponseEntity<AyudaDTO>(AyudaMapper.from(createAyuda), HttpStatus.OK);
         
+        return response;
+    }
+
+    @ResponseBody
+    @PostMapping(value = { ApiController.API_PATH_PRIVATE + "/ayuda_ciudadano" }, produces = {"application/json;charset=UTF-8"})
+    public ResponseEntity<AyudaDTO> createAyudaWithCiudadano(@RequestBody AyudaDTO ayudaDTO) throws PMCException {
+        ResponseEntity<AyudaDTO> response = new ResponseEntity<AyudaDTO>(HttpStatus.BAD_REQUEST);
+
+        Ayuda createAyuda = ayudaService.createAyudaAndCiudadano(AyudaMapper.from(ayudaDTO));
+        response = new ResponseEntity<AyudaDTO>(AyudaMapper.from(createAyuda), HttpStatus.OK);
+
         return response;
     }
 

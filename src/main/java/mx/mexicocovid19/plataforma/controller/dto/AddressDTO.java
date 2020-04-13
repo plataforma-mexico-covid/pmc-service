@@ -8,6 +8,7 @@ import lombok.Setter;
 public class AddressDTO {
     private int id;
     private String calle;
+    private String direccion;
     private String noExterior;
     private String noInterior;
     private String colonia;

@@ -27,7 +27,7 @@ public class UserRestController {
     @Value("${plataforma.url.confirm.token}")
     private String urlConfirmToken;
     
-    @Value("${plataforma.url.change.token}")
+    @Value("${plataforma.url.change.password}")
     private String urlChangePassword;
 
     public UserRestController(final UserService userService) {

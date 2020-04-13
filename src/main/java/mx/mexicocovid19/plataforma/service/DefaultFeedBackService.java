@@ -71,4 +71,13 @@ public class DefaultFeedBackService implements FeedBackService{
 		}
 	}
 
+	@Override
+	public void eliminar(Integer id) {
+		
+		FeedBack feed = new FeedBack();
+		feed.setId(id);
+		feedbackrepo.delete(feed);
+		
+	}
+
 }

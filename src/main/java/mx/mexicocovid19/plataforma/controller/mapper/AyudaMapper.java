@@ -8,7 +8,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AyudaMapper {
+
     public static AyudaDTO from(final Ayuda ayuda) {
+        return from(ayuda, null);
+    }
+
+    public static AyudaDTO from(final Ayuda ayuda, final String usernane) {
         final AyudaDTO ayudaDTO = new AyudaDTO();
         ayudaDTO.setId(ayuda.getId());
         ayudaDTO.setDescripcion(ayuda.getDescripcion());
@@ -17,6 +22,10 @@ public class AyudaMapper {
         ayudaDTO.setTipoAyuda(TipoAyudaMapper.from(ayuda.getTipoAyuda()));
         ayudaDTO.setOrigenAyuda(ayuda.getOrigenAyuda());
         ayudaDTO.setFechaRegistro(DateUtil.formatDTO(ayuda.getFechaRegistro()));
+        ayudaDTO.setIsUserLogIn(false);
+        if (usernane != null && ayuda.getCiudadano().getUser().getUsername() != null) {
+            ayudaDTO.setIsUserLogIn(usernane.equals(ayuda.getCiudadano().getUser().getUsername()));
+        }
         return ayudaDTO;
     }
 
@@ -31,7 +40,7 @@ public class AyudaMapper {
         return ayuda;
     }
 
-    public static List<AyudaDTO> from(final List<Ayuda> ayudas) {
-        return ayudas.stream().map(AyudaMapper::from).collect(Collectors.toList());
+    public static List<AyudaDTO> fromAndMarkByUser(final List<Ayuda> ayudas, final String usernane) {
+        return ayudas.stream().map(it -> AyudaMapper.from(it, usernane)).collect(Collectors.toList());
     }
 }
