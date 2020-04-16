@@ -43,4 +43,8 @@ public class AyudaMapper {
     public static List<AyudaDTO> fromAndMarkByUser(final List<Ayuda> ayudas, final String usernane) {
         return ayudas.stream().map(it -> AyudaMapper.from(it, usernane)).collect(Collectors.toList());
     }
+    
+    public static List<AyudaDTO> from(final List<Ayuda> ayudas) {
+        return ayudas.stream().map(it -> AyudaMapper.from(it)).collect(Collectors.toList());
+    }
 }

@@ -26,4 +26,15 @@ class DefaultAyudaServiceTest extends Specification {
         3       | "AMBOS"       | 1             | 19.429386 | -99.158080 | 1
         4       | "AMBOS"       | 1             | 19.421728 | -99.148887 | 0
     }
+    
+    
+    @Unroll("Escenario numero #index se buscan ayudas tipo: #estatusAyuda")
+    def "Validar consulta de ayudas por estatus de ayuda"() {
+        expect:
+        total == ayudaService.readAyudasByEstatusAyuda(estatusAyuda).size()
+
+        where:
+        index   | estatusAyuda	| total
+        0       | "NUEVA"		| 1
+    }
 }
