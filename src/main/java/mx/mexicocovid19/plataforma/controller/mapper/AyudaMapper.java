@@ -23,7 +23,7 @@ public class AyudaMapper {
         ayudaDTO.setOrigenAyuda(ayuda.getOrigenAyuda());
         ayudaDTO.setFechaRegistro(DateUtil.formatDTO(ayuda.getFechaRegistro()));
         ayudaDTO.setIsUserLogIn(false);
-        if (usernane != null && ayuda.getCiudadano().getUser().getUsername() != null) {
+        if (usernane != null && ayuda.getCiudadano().getUser() != null && ayuda.getCiudadano().getUser().getUsername() != null) {
             ayudaDTO.setIsUserLogIn(usernane.equals(ayuda.getCiudadano().getUser().getUsername()));
         }
         return ayudaDTO;
