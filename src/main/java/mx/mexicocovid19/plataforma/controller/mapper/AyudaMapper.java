@@ -21,7 +21,7 @@ public class AyudaMapper {
         ayudaDTO.setUbicacion(AddressMapper.from(ayuda.getUbicacion()));
         ayudaDTO.setTipoAyuda(TipoAyudaMapper.from(ayuda.getTipoAyuda()));
         ayudaDTO.setOrigenAyuda(ayuda.getOrigenAyuda());
-        ayudaDTO.setCampania(ayuda.getCampania());
+        ayudaDTO.setCampana(ayuda.getCampania());
         ayudaDTO.setMedio(ayuda.getMedio());
         ayudaDTO.setOrigen(ayuda.getOrigen());
         ayudaDTO.setFechaRegistro(DateUtil.formatDTO(ayuda.getFechaRegistro()));
@@ -39,7 +39,7 @@ public class AyudaMapper {
         ayuda.setUbicacion(AddressMapper.from(ayudaDTO.getUbicacion()));
         ayuda.setTipoAyuda(TipoAyudaMapper.from(ayudaDTO.getTipoAyuda()));
         ayuda.setOrigenAyuda(ayudaDTO.getOrigenAyuda());
-        ayuda.setCampania(ayudaDTO.getCampania());
+        ayuda.setCampania(ayudaDTO.getCampana());
         ayuda.setMedio(ayudaDTO.getMedio());
         ayuda.setOrigen(ayudaDTO.getOrigen());
         ayuda.setFechaRegistro(DateUtil.parseDTO(ayudaDTO.getFechaRegistro()));
