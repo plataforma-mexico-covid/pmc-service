@@ -34,6 +34,12 @@ public class Ayuda {
     private EstatusAyuda estatusAyuda;
     @Column(name = "FECHA_REGISTRO")
     private LocalDateTime fechaRegistro;
+    @Column(name = "CAMPANIA")
+    private String campania;
+    @Column(name = "MEDIO")
+    private String medio;
+    @Column(name = "ORIGEN")
+    private String origen;
     @Column(name = "ACTIVE")
     private Boolean active;
 }
