@@ -69,7 +69,7 @@ public class DefaultVoluntarioService implements VoluntarioService {
             voluntario.setActive(true);
             voluntario = voluntarioRepository.save(voluntario);
 
-            mailService.send(user.getUsername(), "", createInfoToEmail(voluntario, password), REGISTRO_VOLUNTARIO);
+            mailService.send(user.getUsername(), user.getUsername(), createInfoToEmail(voluntario, password), REGISTRO_VOLUNTARIO);
         } catch (Exception ex) {
             log.info(ex.getMessage());
             throw new PMCException(ErrorEnum.ERR_GENERICO, "DefaultAyudaService", ex.getMessage());
