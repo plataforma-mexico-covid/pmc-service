@@ -115,6 +115,15 @@ INSERT INTO TIPO_AYUDA (ID, NOMBRE, ACTIVE) VALUES
 (4, 'Apoyo Psicologico', 1),
 (5, 'Apoyo Legal', 1);
 
+INSERT INTO DISCIPLINA (ID, NOMBRE, ACTIVE) VALUES
+(1, 'Eduación / Capacitación / Asesoría', 1),
+(2, 'Diseño Gráfico / Programación', 1),
+(3, 'Difusión / Comunicación Social', 1),
+(4, 'Apoyo Logístico / Call Center / Transporte)', 1),
+(5, 'Medicina / Psicologia / Nutricion', 1),
+(6, 'Oficios / Ayudante en General', 1),
+(7, 'Otros', 1);
+
 INSERT INTO CIUDADANO (ID, NOMBRE, PATERNO, MATERNO, USERNAME, ACTIVE) VALUES
 (1, 'Jorge', 'Cruz', 'Lopez', 'citizen_uno@pmc.mx', 1),
 (2, 'Jose', 'Soto', 'Torres', 'citizen_dos@pmc.mx', 1),

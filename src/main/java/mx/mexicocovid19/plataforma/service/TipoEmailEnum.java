@@ -1,6 +1,7 @@
 package mx.mexicocovid19.plataforma.service;
 
 public enum TipoEmailEnum {
+    REGISTRO_VOLUNTARIO("email/registroVoluntario.vm", "¡Bienvenido a bordo!"),
     REGISTRO_USUARIO("email/registroUsuario.vm", "¡Bienvenido a bordo!"),
     OFRECE_AYUDA("email/ofreceAyuda.vm", "¡Gracias por sumar!"),
     SOLICITA_AYUDA("email/solicitaAyuda.vm", "¡Gracias tu solicitud fue registrada!"),
