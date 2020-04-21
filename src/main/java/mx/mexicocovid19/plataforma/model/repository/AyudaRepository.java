@@ -1,6 +1,7 @@
 package mx.mexicocovid19.plataforma.model.repository;
 
 import mx.mexicocovid19.plataforma.model.entity.Ayuda;
+import mx.mexicocovid19.plataforma.model.entity.EstatusAyuda;
 import mx.mexicocovid19.plataforma.model.entity.OrigenAyuda;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -45,4 +46,9 @@ public interface AyudaRepository extends JpaRepository<Ayuda, Integer> {
                                                          @Param("longitudeRef") double longitudeRef,
                                                          @Param("kilometers") double kilometers,
                                                          @Param("origenAyuda")OrigenAyuda origenAyuda);
+    
+    
+    @Query("select ayuda from Ayuda ayuda " +
+            "where ayuda.estatusAyuda = :statusAyuda ")
+    List<Ayuda> findByEstatusAyuda(@Param("statusAyuda") EstatusAyuda estatusAyuda);
 }

@@ -2,6 +2,7 @@ package mx.mexicocovid19.plataforma.controller.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import mx.mexicocovid19.plataforma.model.entity.EstatusAyuda;
 import mx.mexicocovid19.plataforma.model.entity.OrigenAyuda;
 
 @Getter
@@ -17,5 +18,6 @@ public class AyudaDTO {
     private String campana;
     private String medio;
     private String origen;
+    private EstatusAyuda estatusAyuda;
     private Boolean isUserLogIn;
 }

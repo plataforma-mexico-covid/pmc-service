@@ -33,6 +33,8 @@ public final class DateUtil {
     }
 
     public static LocalDateTime parseDTO(final String date){
+    	if (date == null || date.isEmpty())
+    		return LocalDateTime.now();
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         return LocalDateTime.parse(date, df);
     }

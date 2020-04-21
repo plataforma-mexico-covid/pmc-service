@@ -158,4 +158,16 @@ public class DefaultAyudaService implements AyudaService {
         props.put("contacto-solicita", contactoSolicita);
         return props;
     }
+
+	@Override
+	public List<Ayuda> readAyudasByEstatusAyuda(String estatusAyuda) {
+		EstatusAyuda value = EstatusAyuda.valueOf(estatusAyuda);
+		return ayudaRepository.findByEstatusAyuda(value);
+	}
+
+
+    @Override
+    public List<Ayuda> readAyudas() {
+        return ayudaRepository.findAll();
+    }
 }
