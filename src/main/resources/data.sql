@@ -8,6 +8,7 @@ INSERT INTO USUARIO (USERNAME, PASSWORD, ENABLED, VALIDATED) VALUES
 INSERT INTO USER_ROLE (ID, USERNAME, ROLE) VALUES
 (1, 'admin@pmc.mx', 'ADMIN'),
 (2, 'admin@pmc.mx', 'CITIZEN'),
+(7, 'admin@pmc.mx', 'MANAGER'),
 (3, 'citizen_uno@pmc.mx', 'CITIZEN'),
 (4, 'citizen_dos@pmc.mx', 'CITIZEN'),
 (5, 'vol1@pmc.mx', 'CITIZEN'),

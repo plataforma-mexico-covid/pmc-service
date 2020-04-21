@@ -40,7 +40,7 @@ class BackOfficeRestControllerTest extends Specification {
 		headers.add("X-Auth-Token", token)
 		def requestEntity = new HttpEntity(headers);
 		
-		def uri = "http://localhost:" + port + "/api/v1/private/backoffice/ayuda?estatus=" + estatusAyuda
+		def uri = "http://localhost:" + port + "/api/v1/private/backoffice/ayuda/estatus?estatus=" + estatusAyuda
 		ResponseEntity<List> result = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, List.class)
 		status == result.statusCode
 		size == result.getBody().size()

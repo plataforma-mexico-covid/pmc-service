@@ -25,6 +25,7 @@ public class AyudaMapper {
         ayudaDTO.setMedio(ayuda.getMedio());
         ayudaDTO.setOrigen(ayuda.getOrigen());
         ayudaDTO.setFechaRegistro(DateUtil.formatDTO(ayuda.getFechaRegistro()));
+        ayudaDTO.setEstatusAyuda(ayuda.getEstatusAyuda());
         ayudaDTO.setIsUserLogIn(false);
         if (usernane != null && ayuda.getCiudadano().getUser() != null && ayuda.getCiudadano().getUser().getUsername() != null) {
             ayudaDTO.setIsUserLogIn(usernane.equals(ayuda.getCiudadano().getUser().getUsername()));
@@ -42,6 +43,7 @@ public class AyudaMapper {
         ayuda.setCampania(ayudaDTO.getCampana());
         ayuda.setMedio(ayudaDTO.getMedio());
         ayuda.setOrigen(ayudaDTO.getOrigen());
+        ayuda.setEstatusAyuda(ayudaDTO.getEstatusAyuda());
         ayuda.setFechaRegistro(DateUtil.parseDTO(ayudaDTO.getFechaRegistro()));
         return ayuda;
     }

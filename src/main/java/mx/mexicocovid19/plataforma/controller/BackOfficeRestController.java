@@ -24,11 +24,19 @@ public class BackOfficeRestController {
 
     @ResponseBody
     @GetMapping(
-            value = { ApiController.API_PATH_PRIVATE + "/backoffice/ayuda" },
+            value = { ApiController.API_PATH_PRIVATE + "/backoffice/ayuda/estatus" },
             produces = {"application/json;charset=UTF-8"})
 	public List<AyudaDTO> readAyudasByEstatusAyuda(
 			@RequestParam( value = "estatus", defaultValue = "PENDIENTE") final String estatusAyuda ) {
         return AyudaMapper.from(ayudaService.readAyudasByEstatusAyuda(estatusAyuda));
+    }
+
+    @ResponseBody
+    @GetMapping(
+            value = { ApiController.API_PATH_PRIVATE + "/backoffice/ayuda" },
+            produces = {"application/json;charset=UTF-8"})
+    public List<AyudaDTO> readAyudas() {
+        return AyudaMapper.from(ayudaService.readAyudas());
     }
 
 }

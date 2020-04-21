@@ -6,7 +6,7 @@ security.basic.enabled: false
 endpoints.shutdown.enabled: true
 
 spring.profiles.active: proddb
-spring.profiles.include: security, mailon, testdb
+spring.profiles.include: security, mailon
 
 plataforma:
   ayuda-service:
