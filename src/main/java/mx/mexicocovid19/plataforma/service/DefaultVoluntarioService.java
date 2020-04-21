@@ -84,7 +84,7 @@ public class DefaultVoluntarioService implements VoluntarioService {
         user = userRepository.save(user);
         UserRole role = new UserRole();
         role.setUser(user);
-        role.setRole(Role.VOLUNTARY);
+        role.setRole(Role.PRE_VOLUNTARY);
         userRoleRepository.save(role);
         return user;
     }
