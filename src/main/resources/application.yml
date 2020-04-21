@@ -6,7 +6,7 @@ security.basic.enabled: false
 endpoints.shutdown.enabled: true
 
 spring.profiles.active: proddb
-spring.profiles.include: security, mailon
+spring.profiles.include: security, mailon, testdb
 
 plataforma:
   ayuda-service:
@@ -39,6 +39,17 @@ spring:
         default_schema: ${SECRET_DB_SCHEMA}
         hibernate.show_sql: false
         format_sql: false
+
+---
+spring:
+  profiles: testdb
+  datasource:
+    tomcat:
+      initial-size: 8
+      max-wait: 2000
+      max-active: 10
+      max-idle: 10
+      min-idle: 6
 
 ---
 spring:

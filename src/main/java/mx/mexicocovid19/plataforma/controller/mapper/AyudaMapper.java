@@ -21,9 +21,12 @@ public class AyudaMapper {
         ayudaDTO.setUbicacion(AddressMapper.from(ayuda.getUbicacion()));
         ayudaDTO.setTipoAyuda(TipoAyudaMapper.from(ayuda.getTipoAyuda()));
         ayudaDTO.setOrigenAyuda(ayuda.getOrigenAyuda());
+        ayudaDTO.setCampana(ayuda.getCampania());
+        ayudaDTO.setMedio(ayuda.getMedio());
+        ayudaDTO.setOrigen(ayuda.getOrigen());
         ayudaDTO.setFechaRegistro(DateUtil.formatDTO(ayuda.getFechaRegistro()));
         ayudaDTO.setIsUserLogIn(false);
-        if (usernane != null && ayuda.getCiudadano().getUser().getUsername() != null) {
+        if (usernane != null && ayuda.getCiudadano().getUser() != null && ayuda.getCiudadano().getUser().getUsername() != null) {
             ayudaDTO.setIsUserLogIn(usernane.equals(ayuda.getCiudadano().getUser().getUsername()));
         }
         return ayudaDTO;
@@ -36,6 +39,9 @@ public class AyudaMapper {
         ayuda.setUbicacion(AddressMapper.from(ayudaDTO.getUbicacion()));
         ayuda.setTipoAyuda(TipoAyudaMapper.from(ayudaDTO.getTipoAyuda()));
         ayuda.setOrigenAyuda(ayudaDTO.getOrigenAyuda());
+        ayuda.setCampania(ayudaDTO.getCampana());
+        ayuda.setMedio(ayudaDTO.getMedio());
+        ayuda.setOrigen(ayudaDTO.getOrigen());
         ayuda.setFechaRegistro(DateUtil.parseDTO(ayudaDTO.getFechaRegistro()));
         return ayuda;
     }

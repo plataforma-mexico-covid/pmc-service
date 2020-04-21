@@ -111,6 +111,7 @@ public class DefaultAyudaService implements AyudaService {
                 ciudadanoContactoRepository.save(it);
             });
             GeoLocation location = geoLocationRepository.save(ayuda.getUbicacion());
+            ayuda.setFechaRegistro(LocalDateTime.now());
             ayuda.setCiudadano(ciudadanoSave);
             ayuda.setUbicacion(location);
             ayuda.setEstatusAyuda(EstatusAyuda.NUEVA);

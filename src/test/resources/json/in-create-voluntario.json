@@ -1,0 +1,38 @@
+{
+  "active": true,
+  "ciudadano": {
+    "contactos": [
+      {
+        "contacto": "5544332211",
+        "id": 0,
+        "tipoContacto": "TELEFONO_FIJO"
+      }
+    ],
+    "id": 0,
+    "materno": "",
+    "nombre": "Luis",
+    "paterno": "Macias"
+  },
+  "disciplina": {
+    "id": 1,
+    "nombre": ""
+  },
+  "id": 0,
+  "ubicacion": {
+    "calle": "",
+    "codigoPostal": "44210",
+    "colonia": "",
+    "direccion": "",
+    "estado": "",
+    "id": 0,
+    "idEstado": 0,
+    "idMunicipio": 0,
+    "latitude": 20.706967,
+    "longitude": -103.359795,
+    "municipio": "",
+    "noExterior": "",
+    "noInterior": ""
+  },
+  "username": "luis.macias@hlconsultores.mx",
+  "descripcion": "Asesoria en planes negocios y capacitacion"
+}
