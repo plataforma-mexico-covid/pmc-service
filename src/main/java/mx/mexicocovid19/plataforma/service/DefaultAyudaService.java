@@ -170,6 +170,6 @@ public class DefaultAyudaService implements AyudaService {
 
     @Override
     public List<Ayuda> readAyudas() {
-        return ayudaRepository.findAll();
+        return new ArrayList<>(); //ayudaRepository.findAll().subList(0, 100);
     }
 }
