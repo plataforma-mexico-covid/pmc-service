@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,9 +72,12 @@ public class AyudaRestController {
 
     @ResponseBody
     @PostMapping(value = { ApiController.API_PATH_PRIVATE + "/ayuda_ciudadano" }, produces = {"application/json;charset=UTF-8"})
-    public ResponseEntity<AyudaDTO> createAyudaWithCiudadano(@RequestBody AyudaDTO ayudaDTO) throws PMCException {
+    public ResponseEntity<AyudaDTO> createAyudaWithCiudadano(@RequestBody AyudaDTO ayudaDTO, HttpServletRequest request) throws PMCException {
+        String token = request.getHeader(this.tokenHeader);
+        List<GrantedAuthority> roles = jwtTokenUtil.getRolesFromToken(token);
         ResponseEntity<AyudaDTO> response = new ResponseEntity<AyudaDTO>(HttpStatus.BAD_REQUEST);
-
+        String origen = ayudaService.getOrigenByRole(roles, ayudaDTO.getOrigen());
+        ayudaDTO.setOrigen(origen);
         Ayuda createAyuda = ayudaService.createAyudaAndCiudadano(AyudaMapper.from(ayudaDTO));
         response = new ResponseEntity<AyudaDTO>(AyudaMapper.from(createAyuda), HttpStatus.OK);
 

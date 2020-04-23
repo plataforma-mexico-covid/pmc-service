@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, ApiController.API_PATH_PRIVATE + "/**").authenticated()
                 .antMatchers(HttpMethod.PUT, ApiController.API_PATH_PRIVATE + "/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, ApiController.API_PATH_PRIVATE + "/**").authenticated()
-                .antMatchers(HttpMethod.POST, ApiController.API_PATH_PRIVATE + "/ayuda_ciudadano").access("hasRole('VOLUNTARY')")
+                .antMatchers(HttpMethod.POST, ApiController.API_PATH_PRIVATE + "/ayuda_ciudadano").access("hasAnyRole('VOLUNTARY','CHATBOT','LANDING')")
                 .antMatchers(HttpMethod.GET, ApiController.API_PATH_PRIVATE + "/backoffice").access("hasRole('MANAGER')")
                 .antMatchers("/h2-console/**").permitAll()
                 .and()

@@ -8,6 +8,7 @@ import javax.mail.MessagingException;
 import mx.mexicocovid19.plataforma.model.entity.*;
 import mx.mexicocovid19.plataforma.model.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.log4j.Log4j2;
@@ -76,6 +77,7 @@ public class DefaultAyudaService implements AyudaService {
         	GeoLocation ubicacion = geoLocationRepository.save(ayuda.getUbicacion());
         	ayuda.setUbicacion(ubicacion);
         	ayuda.setCiudadano(ciudadano);
+            ayuda.setOrigen("PLATFORM");
         	
         	if ( !GroseriasHelper.evaluarTexto(ayuda.getDescripcion()) ) {
                 ayuda.setEstatusAyuda(EstatusAyuda.NUEVA);
@@ -99,7 +101,7 @@ public class DefaultAyudaService implements AyudaService {
 
     @Override
     @Transactional
-    public Ayuda createAyudaAndCiudadano(Ayuda ayuda) throws PMCException {
+    public Ayuda createAyudaAndCiudadano(final Ayuda ayuda) throws PMCException {
         try {
             Set<CiudadanoContacto> contactos = ayuda.getCiudadano().getContactos();
             Ciudadano ciudadano = ayuda.getCiudadano();
@@ -115,6 +117,7 @@ public class DefaultAyudaService implements AyudaService {
             ayuda.setCiudadano(ciudadanoSave);
             ayuda.setUbicacion(location);
             ayuda.setEstatusAyuda(EstatusAyuda.NUEVA);
+            ayuda.setActive(true);
             return ayudaRepository.save(ayuda);
         } catch (Exception e){
             log.info(e.getMessage());
@@ -141,6 +144,18 @@ public class DefaultAyudaService implements AyudaService {
                 ayuda.getOrigenAyuda() == OrigenAyuda.OFRECE ? ciudadanoAyuda.get() : ciudadano,
                 ayuda.getOrigenAyuda() == OrigenAyuda.SOLICITA ? ciudadano : ciudadanoAyuda.get());
         mailService.send(ciudadanoAyuda.get().getUser().getUsername(), user.getUsername(), props, MATCH_AYUDA);
+    }
+
+    @Override
+    public String getOrigenByRole(List<GrantedAuthority> roles, final String origen) {
+        for (int i = 0 ; i < roles.size() ; i++ ){
+            String role = (String) ((Map) roles.get(i)).get("authority");
+            if(role.equals(Role.VOLUNTARY.name())
+                    || role.equals(Role.CHATBOT.name())){
+                return role;
+            }
+        }
+        return origen;
     }
 
     private Map<String, Object> createInfoToEmail(Ayuda ayuda, Ciudadano ofrece, Ciudadano solicita){
