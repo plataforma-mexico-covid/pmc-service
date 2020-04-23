@@ -48,6 +48,8 @@ public class DefaultAyudaService implements AyudaService {
     @Autowired
     private AyudaRateRegisterEvaluationServiceHelper ayudaRateRegisterEvaluation;
 
+    @Autowired
+    private GeoLocationService geoLocationService;
 
     @Override
     public List<Ayuda> readAyudas(String origenAyuda, Double longitude, Double latitude, Integer kilometers) {
@@ -112,7 +114,7 @@ public class DefaultAyudaService implements AyudaService {
                 it.setCiudadano(ciudadanoSave);
                 ciudadanoContactoRepository.save(it);
             });
-            GeoLocation location = geoLocationRepository.save(ayuda.getUbicacion());
+            GeoLocation location = geoLocationRepository.save(fillGeoLocation(ayuda.getUbicacion()));
             ayuda.setFechaRegistro(LocalDateTime.now());
             ayuda.setCiudadano(ciudadanoSave);
             ayuda.setUbicacion(location);
@@ -123,6 +125,16 @@ public class DefaultAyudaService implements AyudaService {
             log.info(e.getMessage());
             throw new PMCException(ErrorEnum.ERR_GENERICO, "DefaultAyudaService", e.getMessage());
         }
+    }
+
+    private GeoLocation fillGeoLocation(GeoLocation geoLocation){
+        if ((geoLocation.getLatitude() <= 0 || geoLocation.getLongitude() <= 0)
+                && !geoLocation.getCodigoPostal().isEmpty()){
+            Map<String, Double> loc = geoLocationService.getPositionByPostalCode(geoLocation.getCodigoPostal());
+            geoLocation.setLatitude(loc.get("lat"));
+            geoLocation.setLongitude(loc.get("lng"));
+        }
+        return geoLocation;
     }
 
     @Override

@@ -14,7 +14,8 @@ plataforma:
     registerAvailablePeruser: ${REGISTER_AVAILABLE_PERUSER}
   url.confirm.token: ${URL_CONFIRM_TOKEN}
   url.change.password: ${URL_CHANGE_PASSWORD}
-
+  google:
+    apiKey: ${GOOGLE_MAPS_APIKEY}
 ---
 spring:
   profiles: security
@@ -70,8 +71,11 @@ plataforma:
   ayuda-service:
     hoursToWaitRegister: 1
     registerAvailablePeruser: 10
-  url.confirm.token: http://localhost:4200/#/confirmacion
-  url.change.password: http://localhost:4200/#/recuperar
+  url:
+    confirm.token: http://localhost:4200/#/confirmacion
+    change.password: http://localhost:4200/#/recuperar
+  google:
+    apiKey: localapikey
 ---
 spring:
   profiles: mailon
