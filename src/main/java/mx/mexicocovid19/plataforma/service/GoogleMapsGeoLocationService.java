@@ -27,7 +27,7 @@ public class GoogleMapsGeoLocationService implements GeoLocationService {
         Map<String, Double> result = new HashMap<>();
         try{
             String pc = String.format("%1$" + 5 + "s", postalCode).replace(' ', '0');
-            String url = "https://maps.googleapis.com/maps/api/geocode/json?address=CP" + pc + "&key=" + this.apiKey;
+            String url = "https://maps.googleapis.com/maps/api/geocode/json?address=CodigoPostal" + pc + "&key=" + this.apiKey;
             ResponseEntity<Map> response
                     = restTemplate.getForEntity(url, Map.class);
             if (response.getStatusCode() != HttpStatus.OK)
