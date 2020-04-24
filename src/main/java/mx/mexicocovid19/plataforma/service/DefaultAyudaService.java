@@ -128,7 +128,8 @@ public class DefaultAyudaService implements AyudaService {
     }
 
     private GeoLocation fillGeoLocation(GeoLocation geoLocation){
-        if ((geoLocation.getLatitude() == 0 || geoLocation.getLongitude() == 0)
+        if ((geoLocation.getLatitude() == null || geoLocation.getLongitude() == null
+                || geoLocation.getLatitude() == 0 || geoLocation.getLongitude() == 0)
                 && !geoLocation.getCodigoPostal().isEmpty()){
             Map<String, Double> loc = geoLocationService.getPositionByPostalCode(geoLocation.getCodigoPostal());
             geoLocation.setLatitude(loc.get("lat"));
