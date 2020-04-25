@@ -155,7 +155,7 @@ public class DefaultAyudaService implements AyudaService {
         ayudaRepository.save(ayuda);
         Map<String, Object> props = createInfoToEmail(ayuda,
                 ayuda.getOrigenAyuda() == OrigenAyuda.OFRECE ? ciudadanoAyuda.get() : ciudadano,
-                ayuda.getOrigenAyuda() == OrigenAyuda.SOLICITA ? ciudadano : ciudadanoAyuda.get());
+                ayuda.getOrigenAyuda() == OrigenAyuda.SOLICITA ? ciudadanoAyuda.get() : ciudadano);
         mailService.send(ciudadanoAyuda.get().getUser().getUsername(), user.getUsername(), props, MATCH_AYUDA);
     }
 
