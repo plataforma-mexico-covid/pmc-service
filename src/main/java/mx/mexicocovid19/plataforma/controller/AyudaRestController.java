@@ -5,6 +5,7 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
+import mx.mexicocovid19.plataforma.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -90,6 +91,15 @@ public class AyudaRestController {
             produces = {"application/json;charset=UTF-8"})
     public ResponseEntity<Void> matchAyuda(@PathVariable(value = "ayuda") Integer idAyuda, @RequestBody MatchDTO matchDTO) throws MessagingException {
         ayudaService.matchAyuda(idAyuda, matchDTO.getUsername());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping(
+            value = { ApiController.API_PATH_PRIVATE + "/ayuda/{ayuda}/finish" },
+            produces = {"application/json;charset=UTF-8"})
+    public ResponseEntity<Void> finalizarAyuda(@PathVariable(value = "ayuda") Integer idAyuda, User user, HttpServletRequest request) throws PMCException {
+        ayudaService.finishAyuda(idAyuda, user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

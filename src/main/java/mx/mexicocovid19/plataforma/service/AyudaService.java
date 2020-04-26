@@ -6,6 +6,7 @@ import javax.mail.MessagingException;
 
 import mx.mexicocovid19.plataforma.exception.PMCException;
 import mx.mexicocovid19.plataforma.model.entity.Ayuda;
+import mx.mexicocovid19.plataforma.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 
 public interface AyudaService {
@@ -16,4 +17,5 @@ public interface AyudaService {
     Ayuda createAyudaAndCiudadano(final Ayuda ayuda) throws PMCException;
     void matchAyuda(final Integer idAyuda, final String username) throws MessagingException;
     String getOrigenByRole(final List<GrantedAuthority> roles, final String origen);
+    void finishAyuda(final Integer idAyuda, final User user) throws PMCException;
 }

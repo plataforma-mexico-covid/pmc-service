@@ -19,6 +19,8 @@ public enum ErrorEnum {
 	ERR_RECUPERACION_PASSWORD("ERR-006", "Proceso de recuperacion", "", ErrorConst.ERROR, ""),
 
 	ERR_CONFIRMAR_EMAIL("ERR-007", "Proceso de confirmacion de email", "", ErrorConst.ERROR, ""),
+
+	ERR_USUARIO_AYUDA_NO_AUTORIZADO("ERR-008", "La ayuda no pertenece al usuario firmado", "", ErrorConst.WARNING, ""),
 	
 	/** Errores de autorizacion */	
 	ERR_AUTH_TOKEN_REQUERIDO("ERR-AUTH-001", "Token requerido", "", ErrorConst.ERROR, "");

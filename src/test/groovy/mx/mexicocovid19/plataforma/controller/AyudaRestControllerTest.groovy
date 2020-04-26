@@ -55,5 +55,26 @@ class AyudaRestControllerTest extends Specification {
         1       | "in-create-ayuda-groserias.json"	| HttpStatus.BAD_REQUEST
         2       | "in-create-ayuda.json" 			| HttpStatus.TOO_MANY_REQUESTS
     }
+
+    @Unroll("Escenario numero #index e intenta finalizar ayuda y se espera statusCode #status")
+    def "Validar finalizacion de ayuda"() {
+        expect:
+        String token = jwtTokenUtil.generateToken(user, "p4Ssword", new LiteDevice(DeviceType.MOBILE, DevicePlatform.ANDROID), null)
+        HttpHeaders headers = new HttpHeaders()
+        headers.add("X-Auth-Token", token)
+        def uri = "http://localhost:" + port + "/api/v1/private/ayuda/" + idAyuda + "/finish"
+        def requestEntity = new HttpEntity(headers);
+
+        ResponseEntity<Void> result = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, Void.class)
+        status == result.statusCode
+
+        where:
+        index   | idAyuda   | user                  | status
+        0       | 2			| "citizen_dos@pmc.mx"  |HttpStatus.OK
+        1       | 1	        | "citizen_dos@pmc.mx"  |HttpStatus.BAD_REQUEST
+        2       | 1			| "vol1@pmc.mx"         |HttpStatus.OK
+        3       | 1			| "admin@pmc.mx"        |HttpStatus.OK
+        4       | 1	        | "chatbot@pmc.mx"      |HttpStatus.BAD_REQUEST
+    }
     
 }

@@ -3,6 +3,7 @@ package mx.mexicocovid19.plataforma.service;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import javax.jws.soap.SOAPBinding;
 import javax.mail.MessagingException;
 
 import mx.mexicocovid19.plataforma.model.entity.*;
@@ -19,6 +20,7 @@ import mx.mexicocovid19.plataforma.util.ErrorEnum;
 import org.springframework.transaction.annotation.Transactional;
 
 import static mx.mexicocovid19.plataforma.service.TipoEmailEnum.*;
+import static mx.mexicocovid19.plataforma.util.ErrorEnum.ERR_USUARIO_AYUDA_NO_AUTORIZADO;
 
 @Log4j2
 @Service
@@ -169,6 +171,28 @@ public class DefaultAyudaService implements AyudaService {
             }
         }
         return origen;
+    }
+
+    @Override
+    @Transactional
+    public void finishAyuda(Integer idAyuda, User user) throws PMCException {
+        Ayuda ayuda = ayudaRepository.getOne(idAyuda);
+        if (!allowFinishAyuda(user, ayuda)){
+            log.info(ERR_USUARIO_AYUDA_NO_AUTORIZADO.getMessage());
+            throw new PMCException(ErrorEnum.ERR_GENERICO, "DefaultAyudaService", ERR_USUARIO_AYUDA_NO_AUTORIZADO.getMessage());
+        }
+        ayuda.setEstatusAyuda(EstatusAyuda.COMPLETEDA);
+        ayudaRepository.save(ayuda);
+    }
+
+    private boolean allowFinishAyuda(final User user, final Ayuda ayuda) throws PMCException {
+        Ciudadano ciudadano = ciudadanoRepository.findByUser(user);
+        for (UserRole role: user.getUserRole()) {
+            if(role.getRole()==Role.MANAGER || role.getRole()==Role.VOLUNTARY) {
+                return true;
+            }
+        }
+        return ayuda.getCiudadano().getId() == ciudadano.getId();
     }
 
     private Map<String, Object> createInfoToEmail(Ayuda ayuda, Ciudadano ofrece, Ciudadano solicita){
