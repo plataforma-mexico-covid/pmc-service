@@ -35,20 +35,21 @@ public class UserSessionAop {
     @Around("controllerLayer()")
     public Object aroundControllerMethod(ProceedingJoinPoint pjp) throws Throwable{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
-        log.info("Argumento " + jwtUser);
+        if (authentication.getPrincipal() instanceof JwtUser) {
+            JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
+            log.info("Argumento " + jwtUser);
 
-        for(Object arg :pjp.getArgs()){
-            if(arg instanceof User && jwtUser != null && !jwtUser.getUsername().isEmpty()) {
-                Optional<User> user = userRepository.findById(jwtUser.getUsername());
-                if (user.isPresent()) {
-                    ((User) arg).setUsername(user.get().getUsername());
-                    ((User) arg).setEnabled(user.get().isEnabled());
-                    ((User) arg).setUserRole(user.get().getUserRole());
+            for (Object arg : pjp.getArgs()) {
+                if (arg instanceof User && jwtUser != null && !jwtUser.getUsername().isEmpty()) {
+                    Optional<User> user = userRepository.findById(jwtUser.getUsername());
+                    if (user.isPresent()) {
+                        ((User) arg).setUsername(user.get().getUsername());
+                        ((User) arg).setEnabled(user.get().isEnabled());
+                        ((User) arg).setUserRole(user.get().getUserRole());
+                    }
                 }
             }
         }
-
         Object retVal = pjp.proceed();
         return retVal;
     }
