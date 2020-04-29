@@ -44,17 +44,6 @@ spring:
 
 ---
 spring:
-  profiles: testdb
-  datasource:
-    tomcat:
-      initial-size: 8
-      max-wait: 2000
-      max-active: 10
-      max-idle: 10
-      min-idle: 6
-
----
-spring:
   profiles: localdb
   datasource:
     url: jdbc:h2:mem:testdb

@@ -162,7 +162,9 @@ public class DefaultAyudaService implements AyudaService {
         Map<String, Object> props = createInfoToEmail(ayuda,
                 ayuda.getOrigenAyuda() == OrigenAyuda.OFRECE ? ciudadanoAyuda.get() : ciudadano,
                 ayuda.getOrigenAyuda() == OrigenAyuda.SOLICITA ? ciudadanoAyuda.get() : ciudadano);
-        mailService.send(ciudadanoAyuda.get().getUser().getUsername(), user.getUsername(), props, MATCH_AYUDA);
+        String to = ciudadanoAyuda.get().getUser() != null? ciudadanoAyuda.get().getUser().getUsername() : user.getUsername();
+        String cc = ciudadanoAyuda.get().getUser() != null? user.getUsername() : null;
+        mailService.send(to, cc, props, MATCH_AYUDA);
     }
 
     @Override
@@ -209,10 +211,10 @@ public class DefaultAyudaService implements AyudaService {
         Map<String, Object> props = new HashMap<>();
         props.put("ayuda", ayuda.getDescripcion());
         props.put("nombre-ofrece", ofrece.getNombreCompleto());
-        props.put("email-ofrece", ofrece.getUser().getUsername());
+        props.put("email-ofrece", ofrece.getUser() != null ? ofrece.getUser().getUsername() : "N/A");
         props.put("contacto-ofrece", contactoOfrece);
         props.put("nombre-solicita", solicita.getNombreCompleto());
-        props.put("email-solicita", solicita.getUser().getUsername());
+        props.put("email-solicita", solicita.getUser() != null ? solicita.getUser().getUsername() : "N/A");
         props.put("contacto-solicita", contactoSolicita);
         return props;
     }

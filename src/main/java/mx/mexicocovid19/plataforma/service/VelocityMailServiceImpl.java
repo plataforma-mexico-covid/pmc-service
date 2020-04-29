@@ -32,7 +32,9 @@ public class VelocityMailServiceImpl implements MailService {
     @Override
     public void send(String to, String cc, Map<String, Object> variables, TipoEmailEnum tipoEmailEnum) throws MessagingException {
         templateMessage.setTo(to);
-        templateMessage.setCc(cc);
+        if (cc != null) {
+            templateMessage.setCc(cc);
+        }
         templateMessage.setSubject(tipoEmailEnum.getSubject());
         send(templateMessage, convertToVelocityContext(variables), tipoEmailEnum.getTemplate());
     }
@@ -53,7 +55,9 @@ public class VelocityMailServiceImpl implements MailService {
         MimeMessagePreparator preparator = mimeMessage -> {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
             message.setTo(msg.getTo());
-            message.setCc(msg.getCc());
+            if (msg.getCc() != null) {
+                message.setCc(msg.getCc());
+            }
             message.setFrom(msg.getFrom());
             message.setSubject(msg.getSubject());
 
