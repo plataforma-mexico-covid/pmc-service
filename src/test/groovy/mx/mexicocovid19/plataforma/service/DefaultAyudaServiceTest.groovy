@@ -35,6 +35,6 @@ class DefaultAyudaServiceTest extends Specification {
 
         where:
         index   | estatusAyuda	| total
-        0       | "NUEVA"		| 1
+        0       | "NUEVA"		| 2
     }
 }

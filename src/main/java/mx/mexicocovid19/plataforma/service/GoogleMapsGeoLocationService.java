@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Service
 @Profile("locationon")
@@ -36,11 +37,44 @@ public class GoogleMapsGeoLocationService implements GeoLocationService {
                 return result;
             Map location = response.getBody();
             if (location.get("status").equals("OK")){
-                return (Map<String, Double>) ((Map)((Map) ((List) location.get("results")).get(0)).get("geometry")).get("location");
+                Map<String, Double> loc = (Map<String, Double>) ((Map)((Map) ((List) location.get("results")).get(0)).get("geometry")).get("location");
+                return moveSomeMeters(loc);
             }
         } catch (Exception ex) {
             logger.error(ex.getMessage());
         }
         return result;
+    }
+
+    private Map<String, Double> moveSomeMeters(final Map<String, Double> location){
+        //Position, decimal degrees
+        double lat = location.get("lat");
+        double lon = location.get("lng");
+
+        //Earth’s radius, sphere
+        double R=6378137;
+
+        //offsets in meters
+        double dn = randomMeters();
+        double de = randomMeters();
+
+        //Coordinate offsets in radians
+        double dLat = dn/R;
+        double dLon = de/(R*Math.cos(Math.PI*lat/180));
+
+        //OffsetPosition, decimal degrees
+        double latO = lat + dLat * 180/Math.PI;
+        double lonO = lon + dLon * 180/Math.PI;
+        return new HashMap<String, Double>() {{
+            put("lat", latO);
+            put("lng", lonO);
+        }};
+    }
+
+    private int randomMeters(){
+        Random r = new Random();
+        int low = 10;
+        int high = 200;
+        return r.nextInt(high-low) + low;
     }
 }

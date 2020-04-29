@@ -6,7 +6,7 @@ security.basic.enabled: false
 endpoints.shutdown.enabled: true
 
 spring.profiles.active: security
-spring.profiles.include: localdb, mailoff
+spring.profiles.include: localdb, mailoff, matchoff, locationoff
 
 ---
 spring:

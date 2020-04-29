@@ -47,7 +47,7 @@ class BackOfficeRestControllerTest extends Specification {
 
 		where:
 		index	|	estatusAyuda	|	status			|	size		
-		0		|	"NUEVA"			|	HttpStatus.OK	|	1
+		0		|	"NUEVA"			|	HttpStatus.OK	|	2
 	}
 	
 }
