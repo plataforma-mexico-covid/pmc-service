@@ -3,9 +3,9 @@ package mx.mexicocovid19.plataforma.service;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import javax.jws.soap.SOAPBinding;
 import javax.mail.MessagingException;
 
+import lombok.extern.log4j.Log4j;
 import mx.mexicocovid19.plataforma.model.entity.*;
 import mx.mexicocovid19.plataforma.model.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +53,9 @@ public class DefaultAyudaService implements AyudaService {
     @Autowired
     private GeoLocationService geoLocationService;
 
+    @Autowired
+    private MatchOnlineService matchOnlineService;
+
     @Override
     public List<Ayuda> readAyudas(String origenAyuda, Double longitude, Double latitude, Integer kilometers) {
         try {
@@ -91,6 +94,7 @@ public class DefaultAyudaService implements AyudaService {
         		Map<String, Object> props = new HashMap<>();
         		props.put("nombre", ayuda.getCiudadano().getNombreCompleto());
         		TipoEmailEnum tipoEmail = ayuda.getOrigenAyuda() == OrigenAyuda.SOLICITA ? SOLICITA_AYUDA : OFRECE_AYUDA;
+                matchOnlineService.verifyMatch(ayuda);
                 mailService.send(ciudadano.getUser().getUsername(), ciudadano.getUser().getUsername(), props, tipoEmail);
 
         		return ayudaTmp;	

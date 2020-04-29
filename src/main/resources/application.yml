@@ -6,9 +6,10 @@ security.basic.enabled: false
 endpoints.shutdown.enabled: true
 
 spring.profiles.active: proddb
-spring.profiles.include: security, mailon
+spring.profiles.include: security, mailon, matchon, locationon
 
 plataforma:
+  analizer.url: ${URL_ANALIZER}
   ayuda-service:
     hoursToWaitRegister: ${HOURS_WAIT_REGISTER}
     registerAvailablePeruser: ${REGISTER_AVAILABLE_PERUSER}
@@ -68,6 +69,7 @@ spring:
       path: /h2-console
 
 plataforma:
+  analizer.url: http://localhost:8091/
   ayuda-service:
     hoursToWaitRegister: 1
     registerAvailablePeruser: 10
@@ -75,7 +77,7 @@ plataforma:
     confirm.token: http://localhost:4200/#/confirmacion
     change.password: http://localhost:4200/#/recuperar
   google:
-    apiKey: localapikey
+    apiKey: AIzaSyAScZb_sTW_vToyo58fXKBKp1dPaPeM_fQ
 ---
 spring:
   profiles: mailon

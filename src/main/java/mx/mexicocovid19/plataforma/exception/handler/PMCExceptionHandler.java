@@ -35,8 +35,8 @@ public class PMCExceptionHandler implements Serializable{
 	 */
 	@ExceptionHandler(PMCException.class)
 	ResponseEntity<DefaultErrorList> handleActivationException(PMCException ex) {
-		
 		Notification notification = new Notification(ex.getCode(), ex.getMessage(), "ERROR");
+		log.error(ex.getMessage());
 		if ( ex.getErrorEnum() == ErrorEnum.ERR_MAX_AYUDA ) {
 			return new ResponseEntity<>(new DefaultErrorList(notification), HttpStatus.TOO_MANY_REQUESTS);
 		} else {
@@ -53,7 +53,6 @@ public class PMCExceptionHandler implements Serializable{
 	 */
 	@ExceptionHandler(Exception.class)
 	ResponseEntity<DefaultErrorList> handleGenericException(Exception ex) {
-		
 		Notification notification = new Notification(ErrorEnum.ERR_GENERICO.getCode(), ex.getMessage(), ErrorEnum.ERR_GENERICO.getLevel());
 		String jsonError = new Gson().toJson(notification);
 		log.error(jsonError);
@@ -77,6 +76,7 @@ public class PMCExceptionHandler implements Serializable{
 		 * devolvemos nada en caso contrario debemos devolver un Internal Error 500 por
 		 * un error de IO
 		 */
+		log.error(e.getMessage());
 		if (StringUtils.containsIgnoreCase(ExceptionUtils.getRootCauseMessage(e), "Broken pipe")) { // (2)
 			return null; // (2) socket is closed, cannot return any response
 		} else {

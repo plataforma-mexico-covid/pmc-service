@@ -3,6 +3,7 @@ package mx.mexicocovid19.plataforma.service;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Profile("locationon")
 public class GoogleMapsGeoLocationService implements GeoLocationService {
 
     @Value("${plataforma.google.apiKey}")
