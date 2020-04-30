@@ -94,7 +94,7 @@ public class DefaultAyudaService implements AyudaService {
         		Map<String, Object> props = new HashMap<>();
         		props.put("nombre", ayuda.getCiudadano().getNombreCompleto());
         		TipoEmailEnum tipoEmail = ayuda.getOrigenAyuda() == OrigenAyuda.SOLICITA ? SOLICITA_AYUDA : OFRECE_AYUDA;
-                matchOnlineService.verifyMatch(ayuda);
+                matchOnlineService.verifyMatchAutomatic(ayuda);
                 mailService.send(ciudadano.getUser().getUsername(), ciudadano.getUser().getUsername(), props, tipoEmail);
 
         		return ayudaTmp;	
@@ -126,7 +126,9 @@ public class DefaultAyudaService implements AyudaService {
             ayuda.setUbicacion(location);
             ayuda.setEstatusAyuda(EstatusAyuda.NUEVA);
             ayuda.setActive(true);
-            return ayudaRepository.save(ayuda);
+            Ayuda ayudaStore = ayudaRepository.save(ayuda);
+            matchOnlineService.verifyMatchAutomatic(ayudaStore);
+            return ayudaStore;
         } catch (Exception e){
             log.info(e.getMessage());
             throw new PMCException(ErrorEnum.ERR_GENERICO, "DefaultAyudaService", e.getMessage());
@@ -164,6 +166,7 @@ public class DefaultAyudaService implements AyudaService {
                 ayuda.getOrigenAyuda() == OrigenAyuda.SOLICITA ? ciudadanoAyuda.get() : ciudadano);
         String to = ciudadanoAyuda.get().getUser() != null? ciudadanoAyuda.get().getUser().getUsername() : user.getUsername();
         String cc = ciudadanoAyuda.get().getUser() != null? user.getUsername() : null;
+        matchOnlineService.verifyMatchManual(ayuda, ciudadano);
         mailService.send(to, cc, props, MATCH_AYUDA);
     }
 
