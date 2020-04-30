@@ -5,7 +5,6 @@ import java.util.*;
 
 import javax.mail.MessagingException;
 
-import lombok.extern.log4j.Log4j;
 import mx.mexicocovid19.plataforma.model.entity.*;
 import mx.mexicocovid19.plataforma.model.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +42,6 @@ public class DefaultAyudaService implements AyudaService {
 
     @Autowired
     private MailService mailService;
-
-    @Autowired
-    private PeticionRepository peticionRepository;
     
     @Autowired
     private AyudaRateRegisterEvaluationServiceHelper ayudaRateRegisterEvaluation;
@@ -154,11 +150,6 @@ public class DefaultAyudaService implements AyudaService {
         user.setUsername(username);
         Optional<Ciudadano> ciudadanoAyuda = ciudadanoRepository.findById(ayuda.getCiudadano().getId());
         Ciudadano ciudadano = ciudadanoRepository.findByUser(user);
-        Peticion peticion = new Peticion();
-        peticion.setAyuda(ayuda);
-        peticion.setCiudadano(ciudadano);
-        peticion.setFechaPeticion(LocalDateTime.now());
-        peticionRepository.save(peticion);
         ayuda.setEstatusAyuda(EstatusAyuda.EN_PROGRESO);
         ayudaRepository.save(ayuda);
         Map<String, Object> props = createInfoToEmail(ayuda,

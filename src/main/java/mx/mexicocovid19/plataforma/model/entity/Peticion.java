@@ -21,6 +21,12 @@ public class Peticion {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CIUDADANO_ID", nullable = false)
     private Ciudadano ciudadano;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "AYUDA_MATCH_ID", nullable = true)
+    private Ayuda ayudaMatch;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TIPO_MATCH")
+    private TipoMatch tipoMatch;
     @Column(name = "FECHA_PETICION")
     private LocalDateTime fechaPeticion;
 }

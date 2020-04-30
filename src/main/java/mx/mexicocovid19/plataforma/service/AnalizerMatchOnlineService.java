@@ -25,6 +25,7 @@ public class AnalizerMatchOnlineService implements MatchOnlineService {
 
     @Override
     public void verifyMatchAutomatic(final Ayuda ayuda) {
+        log.info("verifyMatchAutomatic: " + this.analizerUrl + " ayuda: " + ayuda.getId());
         try{
             Map<String, Object> request = createRequestMatchAutomatic(ayuda);
             ResponseEntity<Void> response
@@ -39,6 +40,7 @@ public class AnalizerMatchOnlineService implements MatchOnlineService {
 
     @Override
     public void verifyMatchManual(Ayuda ayuda, Ciudadano ciudadano) {
+        log.info("verifyMatchManual: " + this.analizerUrl + " ayuda: " + ayuda.getId() + " ciudadano: " + ciudadano.getId());
         try{
             Map<String, Object> request = createRequestMatchManual(ayuda, ciudadano);
             ResponseEntity<Void> response
