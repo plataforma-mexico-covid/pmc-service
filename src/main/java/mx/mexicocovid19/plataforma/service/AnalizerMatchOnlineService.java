@@ -31,7 +31,8 @@ public class AnalizerMatchOnlineService implements MatchOnlineService {
             Map<String, Object> request = createRequestMatchAutomatic(ayuda);
             ResponseEntity<Void> response
                     = restTemplate.postForEntity(this.analizerUrl + "/api/v1/internal/analizer/reminder", request, Void.class);
-            if (response.getStatusCode() == HttpStatus.OK)
+            log.info("INFO Match Ayuda Online: " + ayuda.getId() + " status: " + response.getStatusCode() + " request: " + new Gson().toJson(request));
+            if (response.getStatusCode() == HttpStatus.CREATED)
                 return;
             log.error("FAIL Match Ayuda Online: " + ayuda.getId() + " status: " + response.getStatusCode() + " request: " + new Gson().toJson(request));
         } catch (Exception ex) {
@@ -46,7 +47,8 @@ public class AnalizerMatchOnlineService implements MatchOnlineService {
             Map<String, Object> request = createRequestMatchManual(ayuda, ciudadano);
             ResponseEntity<Void> response
                     = restTemplate.postForEntity(this.analizerUrl + "/api/v1/internal/notification/match", request, Void.class);
-            if (response.getStatusCode() == HttpStatus.OK)
+            log.info("INFO Match Ayuda Online: " + ayuda.getId() + " status: " + response.getStatusCode() + " request: " + new Gson().toJson(request));
+            if (response.getStatusCode() == HttpStatus.CREATED)
                 return;
             log.error("FAIL Match Ayuda Online: " + ayuda.getId() + " status: " + response.getStatusCode() + " request: " + new Gson().toJson(request));
         } catch (Exception ex) {

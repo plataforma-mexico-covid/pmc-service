@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import javax.mail.MessagingException;
+import javax.swing.plaf.IconUIResource;
 
 import mx.mexicocovid19.plataforma.model.entity.*;
 import mx.mexicocovid19.plataforma.model.repository.*;
@@ -63,40 +64,26 @@ public class DefaultAyudaService implements AyudaService {
     }
 
     @Override
-    @Transactional
     public Ayuda createAyuda(final Ayuda ayuda, final String username) throws PMCException {
-        
         try {
-        	
     		// Valida el numero de ayudas que ha registrado el usuario firmado
     		if ( ayudaRateRegisterEvaluation.isMaximumRequestsPerHourExceeded(username) ) {
     			throw new PMCException(ErrorEnum.ERR_MAX_AYUDA, "DefaultAyudaService");
     		}
-    		
-    		
         	User user = new User();
         	user.setUsername(username);
         	Ciudadano ciudadano = ciudadanoRepository.findByUser(user);
-        	GeoLocation ubicacion = geoLocationRepository.save(ayuda.getUbicacion());
-        	ayuda.setUbicacion(ubicacion);
-        	ayuda.setCiudadano(ciudadano);
-            ayuda.setOrigen("PLATFORM");
-        	
-        	if ( !GroseriasHelper.evaluarTexto(ayuda.getDescripcion()) ) {
-                ayuda.setEstatusAyuda(EstatusAyuda.NUEVA);
-        		Ayuda ayudaTmp = ayudaRepository.save(ayuda);
+            Ayuda ayudaTmp = saveAyuda(ayuda, ciudadano);
 
-        		// Envia notificacion por correo electronic
-        		Map<String, Object> props = new HashMap<>();
-        		props.put("nombre", ayuda.getCiudadano().getNombreCompleto());
-        		TipoEmailEnum tipoEmail = ayuda.getOrigenAyuda() == OrigenAyuda.SOLICITA ? SOLICITA_AYUDA : OFRECE_AYUDA;
-                matchOnlineService.verifyMatchAutomatic(ayuda);
-                mailService.send(ciudadano.getUser().getUsername(), ciudadano.getUser().getUsername(), props, tipoEmail);
+            // Envia notificacion por correo electronic
+            Map<String, Object> props = new HashMap<>();
+            props.put("nombre", ayudaTmp.getCiudadano().getNombreCompleto());
+            TipoEmailEnum tipoEmail = ayudaTmp.getOrigenAyuda() == OrigenAyuda.SOLICITA ? SOLICITA_AYUDA : OFRECE_AYUDA;
+            matchOnlineService.verifyMatchAutomatic(ayudaTmp);
+            mailService.send(ciudadano.getUser().getUsername(), ciudadano.getUser().getUsername(), props, tipoEmail);
 
-        		return ayudaTmp;	
-        	} else {        		
-        		throw new PMCException(ErrorEnum.ERR_LENGUAJE_SOEZ, "DefaultAyudaService");	
-        	}			
+            return ayudaTmp;
+
 		} catch (MessagingException e) {
 			log.info(e.getMessage());
 			throw new PMCException(ErrorEnum.ERR_GENERICO, "DefaultAyudaService", e.getMessage());
@@ -104,54 +91,24 @@ public class DefaultAyudaService implements AyudaService {
     }
 
     @Override
-    @Transactional
     public Ayuda createAyudaAndCiudadano(final Ayuda ayuda) throws PMCException {
         try {
-            Set<CiudadanoContacto> contactos = ayuda.getCiudadano().getContactos();
-            Ciudadano ciudadano = ayuda.getCiudadano();
-            ciudadano.setContactos(null);
-            ciudadano.setActive(true);
-            Ciudadano ciudadanoSave = ciudadanoRepository.save(ayuda.getCiudadano());
-            contactos.forEach(it -> {
-                it.setCiudadano(ciudadanoSave);
-                ciudadanoContactoRepository.save(it);
-            });
-            GeoLocation location = geoLocationRepository.save(fillGeoLocation(ayuda.getUbicacion()));
-            ayuda.setFechaRegistro(LocalDateTime.now());
-            ayuda.setCiudadano(ciudadanoSave);
-            ayuda.setUbicacion(location);
-            ayuda.setEstatusAyuda(EstatusAyuda.NUEVA);
-            ayuda.setActive(true);
-            Ayuda ayudaStore = ayudaRepository.save(ayuda);
+            Ayuda ayudaStore = saveAyudaAndCiudadano(ayuda);
             matchOnlineService.verifyMatchAutomatic(ayudaStore);
             return ayudaStore;
         } catch (Exception e){
             log.info(e.getMessage());
-            throw new PMCException(ErrorEnum.ERR_GENERICO, "DefaultAyudaService", e.getMessage());
+            throw new PMCException(ErrorEnum.ERR_GENERICO, "DefaultAyudaService createAyudaAndCiudadano", e.getMessage());
         }
-    }
-
-    private GeoLocation fillGeoLocation(GeoLocation geoLocation){
-        if ((geoLocation.getLatitude() == null || geoLocation.getLongitude() == null
-                || geoLocation.getLatitude() == 0 || geoLocation.getLongitude() == 0)
-                && !geoLocation.getCodigoPostal().isEmpty()){
-            Map<String, Double> loc = geoLocationService.getPositionByPostalCode(geoLocation.getCodigoPostal());
-            geoLocation.setLatitude(loc.get("lat"));
-            geoLocation.setLongitude(loc.get("lng"));
-        }
-        return geoLocation;
     }
 
     @Override
-    @Transactional
     public void matchAyuda(Integer idAyuda, String username) throws MessagingException {
-        Ayuda ayuda = ayudaRepository.getOne(idAyuda);
+        Ayuda ayuda = saveMatchAyuda(idAyuda);
         User user = new User();
         user.setUsername(username);
         Optional<Ciudadano> ciudadanoAyuda = ciudadanoRepository.findById(ayuda.getCiudadano().getId());
         Ciudadano ciudadano = ciudadanoRepository.findByUser(user);
-        ayuda.setEstatusAyuda(EstatusAyuda.EN_PROGRESO);
-        ayudaRepository.save(ayuda);
         Map<String, Object> props = createInfoToEmail(ayuda,
                 ayuda.getOrigenAyuda() == OrigenAyuda.OFRECE ? ciudadanoAyuda.get() : ciudadano,
                 ayuda.getOrigenAyuda() == OrigenAyuda.SOLICITA ? ciudadanoAyuda.get() : ciudadano);
@@ -183,6 +140,66 @@ public class DefaultAyudaService implements AyudaService {
         }
         ayuda.setEstatusAyuda(EstatusAyuda.COMPLETEDA);
         ayudaRepository.save(ayuda);
+    }
+
+    @Transactional
+    private Ayuda saveAyuda(final Ayuda ayuda, final Ciudadano ciudadano) throws PMCException {
+        GeoLocation ubicacion = geoLocationRepository.save(ayuda.getUbicacion());
+        ayuda.setUbicacion(ubicacion);
+        ayuda.setCiudadano(ciudadano);
+        ayuda.setOrigen("PLATFORM");
+
+        if ( !GroseriasHelper.evaluarTexto(ayuda.getDescripcion()) ) {
+            ayuda.setEstatusAyuda(EstatusAyuda.NUEVA);
+            Ayuda ayudaTmp = ayudaRepository.save(ayuda);
+
+            return ayudaTmp;
+        } else {
+            throw new PMCException(ErrorEnum.ERR_LENGUAJE_SOEZ, "DefaultAyudaService");
+        }
+    }
+
+    @Transactional
+    private Ayuda saveAyudaAndCiudadano(final Ayuda ayuda) throws PMCException {
+        try {
+            Set<CiudadanoContacto> contactos = ayuda.getCiudadano().getContactos();
+            Ciudadano ciudadano = ayuda.getCiudadano();
+            ciudadano.setContactos(null);
+            ciudadano.setActive(true);
+            Ciudadano ciudadanoSave = ciudadanoRepository.save(ayuda.getCiudadano());
+            contactos.forEach(it -> {
+                it.setCiudadano(ciudadanoSave);
+                ciudadanoContactoRepository.save(it);
+            });
+            GeoLocation location = geoLocationRepository.save(fillGeoLocation(ayuda.getUbicacion()));
+            ayuda.setFechaRegistro(LocalDateTime.now());
+            ayuda.setCiudadano(ciudadanoSave);
+            ayuda.setUbicacion(location);
+            ayuda.setEstatusAyuda(EstatusAyuda.NUEVA);
+            ayuda.setActive(true);
+            return ayudaRepository.save(ayuda);
+        } catch (Exception e){
+            log.info(e.getMessage());
+            throw new PMCException(ErrorEnum.ERR_GENERICO, "DefaultAyudaService saveAyudaAndCiudadano", e.getMessage());
+        }
+    }
+
+    private GeoLocation fillGeoLocation(GeoLocation geoLocation){
+        if ((geoLocation.getLatitude() == null || geoLocation.getLongitude() == null
+                || geoLocation.getLatitude() == 0 || geoLocation.getLongitude() == 0)
+                && !geoLocation.getCodigoPostal().isEmpty()){
+            Map<String, Double> loc = geoLocationService.getPositionByPostalCode(geoLocation.getCodigoPostal());
+            geoLocation.setLatitude(loc.get("lat"));
+            geoLocation.setLongitude(loc.get("lng"));
+        }
+        return geoLocation;
+    }
+
+    @Transactional
+    private Ayuda saveMatchAyuda(Integer idAyuda) {
+        Ayuda ayuda = ayudaRepository.getOne(idAyuda);
+        ayuda.setEstatusAyuda(EstatusAyuda.EN_PROGRESO);
+        return ayudaRepository.save(ayuda);
     }
 
     private boolean allowFinishAyuda(final User user, final Ayuda ayuda) throws PMCException {
