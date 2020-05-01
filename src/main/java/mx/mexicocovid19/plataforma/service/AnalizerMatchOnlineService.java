@@ -1,5 +1,6 @@
 package mx.mexicocovid19.plataforma.service;
 
+import com.google.gson.Gson;
 import lombok.extern.log4j.Log4j2;
 import mx.mexicocovid19.plataforma.model.entity.Ayuda;
 import mx.mexicocovid19.plataforma.model.entity.Ciudadano;
@@ -32,7 +33,7 @@ public class AnalizerMatchOnlineService implements MatchOnlineService {
                     = restTemplate.postForEntity(this.analizerUrl + "/api/v1/internal/analizer/reminder", request, Void.class);
             if (response.getStatusCode() == HttpStatus.OK)
                 return;
-            log.error("FAIL Match Ayuda Online: " + ayuda.getId());
+            log.error("FAIL Match Ayuda Online: " + ayuda.getId() + " status: " + response.getStatusCode() + " request: " + new Gson().toJson(request));
         } catch (Exception ex) {
             log.error("FAIL Match Ayuda Online: " + ex.getMessage());
         }
@@ -47,7 +48,7 @@ public class AnalizerMatchOnlineService implements MatchOnlineService {
                     = restTemplate.postForEntity(this.analizerUrl + "/api/v1/internal/notification/match", request, Void.class);
             if (response.getStatusCode() == HttpStatus.OK)
                 return;
-            log.error("FAIL Match Ayuda Online: " + ayuda.getId());
+            log.error("FAIL Match Ayuda Online: " + ayuda.getId() + " status: " + response.getStatusCode() + " request: " + new Gson().toJson(request));
         } catch (Exception ex) {
             log.error("FAIL Match Ayuda Online: " + ex.getMessage());
         }
