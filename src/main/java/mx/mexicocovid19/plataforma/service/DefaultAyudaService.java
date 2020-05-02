@@ -6,6 +6,7 @@ import java.util.*;
 import javax.mail.MessagingException;
 import javax.swing.plaf.IconUIResource;
 
+import com.google.gson.Gson;
 import mx.mexicocovid19.plataforma.model.entity.*;
 import mx.mexicocovid19.plataforma.model.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,11 +121,14 @@ public class DefaultAyudaService implements AyudaService {
 
     @Override
     public String getOrigenByRole(List<GrantedAuthority> roles, final String origen) {
+        log.info("getOrigenByRole: roles: " + new Gson().toJson(roles) + " origen: " + origen);
         for (int i = 0 ; i < roles.size() ; i++ ){
             String role = (String) ((Map) roles.get(i)).get("authority");
             if(role.equals(Role.VOLUNTARY.name())
                     || role.equals(Role.CHATBOT.name())){
                 return role;
+            } else if (role.equals(Role.LANDING.name())) {
+                return (origen != null && !origen.isEmpty()) ? origen : Role.LANDING.name();
             }
         }
         return origen;

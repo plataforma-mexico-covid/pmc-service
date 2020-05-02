@@ -118,7 +118,10 @@ INSERT INTO TIPO_AYUDA (ID, NOMBRE, ACTIVE) VALUES
 (2, 'Envios / Traslados', 1),
 (3, 'Farmacia', 1),
 (4, 'Apoyo Psicologico', 1),
-(5, 'Apoyo Legal', 1);
+(5, 'Apoyo Legal', 1),
+(6, 'Apoyo', 1),
+(7, 'Otro', 1),
+(8, 'Oferta Laboral', 1);
 
 INSERT INTO DISCIPLINA (ID, NOMBRE, ACTIVE) VALUES
 (1, 'Eduación / Capacitación / Asesoría', 1),

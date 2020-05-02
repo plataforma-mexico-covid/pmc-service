@@ -5,6 +5,7 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.log4j.Log4j2;
 import mx.mexicocovid19.plataforma.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,7 @@ import mx.mexicocovid19.plataforma.service.AyudaService;
 /**
  * Created by betuzo on 14/05/15.
  */
+@Log4j2
 @Controller
 public class AyudaRestController {
 
@@ -78,6 +80,7 @@ public class AyudaRestController {
         List<GrantedAuthority> roles = jwtTokenUtil.getRolesFromToken(token);
         ResponseEntity<AyudaDTO> response = new ResponseEntity<AyudaDTO>(HttpStatus.BAD_REQUEST);
         String origen = ayudaService.getOrigenByRole(roles, ayudaDTO.getOrigen());
+        log.info("createAyudaWithCiudadano: origen: " + origen);
         ayudaDTO.setOrigen(origen);
         Ayuda createAyuda = ayudaService.createAyudaAndCiudadano(AyudaMapper.from(ayudaDTO));
         response = new ResponseEntity<AyudaDTO>(AyudaMapper.from(createAyuda), HttpStatus.OK);

@@ -15,7 +15,7 @@ public class Ayuda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
-    @Column(name = "DESCRIPCION")
+    @Column(name = "DESCRIPCION", length = 1000)
     private String descripcion;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CIUDADANO_ID", nullable = false)
