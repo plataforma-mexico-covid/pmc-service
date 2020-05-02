@@ -13,10 +13,9 @@ INSERT INTO USER_ROLE (ID, USERNAME, ROLE) VALUES
 (7, 'admin@pmc.mx', 'MANAGER'),
 (3, 'citizen_uno@pmc.mx', 'CITIZEN'),
 (4, 'citizen_dos@pmc.mx', 'CITIZEN'),
-(5, 'vol1@pmc.mx', 'CITIZEN'),
-(6, 'vol1@pmc.mx', 'VOLUNTARY'),
-(8, 'chatbot@pmc.mx', 'CHATBOT'),
-(9, 'landing@pmc.mx', 'LANDING');
+(5, 'vol1@pmc.mx', 'VOLUNTARY'),
+(6, 'chatbot@pmc.mx', 'CHATBOT'),
+(8, 'landing@pmc.mx', 'LANDING');
 
 INSERT INTO PROVINCE (ID, NOMBRE, ABREVIATURA) VALUES
 (1, 'Aguascalientes', 'AGS'),
