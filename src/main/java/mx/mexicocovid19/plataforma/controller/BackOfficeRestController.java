@@ -2,11 +2,15 @@ package mx.mexicocovid19.plataforma.controller;
 
 import java.util.List;
 
+import mx.mexicocovid19.plataforma.controller.dto.pagination.PageRequest;
+import mx.mexicocovid19.plataforma.controller.dto.pagination.PageResponse;
+import mx.mexicocovid19.plataforma.exception.PMCException;
+import mx.mexicocovid19.plataforma.model.entity.Ayuda;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import mx.mexicocovid19.plataforma.ApiController;
 import mx.mexicocovid19.plataforma.controller.dto.AyudaDTO;
@@ -32,11 +36,9 @@ public class BackOfficeRestController {
     }
 
     @ResponseBody
-    @GetMapping(
-            value = { ApiController.API_PATH_PRIVATE + "/backoffice/ayuda" },
-            produces = {"application/json;charset=UTF-8"})
-    public List<AyudaDTO> readAyudas() {
-        return AyudaMapper.from(ayudaService.readAyudas());
+    @PostMapping(value = { ApiController.API_PATH_PRIVATE + "/backoffice/ayuda" }, produces = {"application/json;charset=UTF-8"})
+    public PageResponse<AyudaDTO> createAyuda(@RequestBody PageRequest pageRequest) throws PMCException {
+        return ayudaService.readAyudasByGenericFilter(pageRequest);
     }
 
 }

@@ -7,6 +7,10 @@ import javax.mail.MessagingException;
 import javax.swing.plaf.IconUIResource;
 
 import com.google.gson.Gson;
+import mx.mexicocovid19.plataforma.controller.dto.AyudaDTO;
+import mx.mexicocovid19.plataforma.controller.dto.pagination.PageRequest;
+import mx.mexicocovid19.plataforma.controller.dto.pagination.PageResponse;
+import mx.mexicocovid19.plataforma.controller.mapper.AyudaMapper;
 import mx.mexicocovid19.plataforma.model.entity.*;
 import mx.mexicocovid19.plataforma.model.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -242,7 +246,30 @@ public class DefaultAyudaService implements AyudaService {
 
 
     @Override
-    public List<Ayuda> readAyudas() {
-        return new ArrayList<>(); //ayudaRepository.findAll().subList(0, 100);
+    public PageResponse<AyudaDTO> readAyudasByGenericFilter(final PageRequest pageRequest) {
+        PageResponse<AyudaDTO> response = new PageResponse<>();
+        String search = pageRequest.getSearch().getValue();
+        OrigenAyuda origenAyuda = null;
+        EstatusAyuda estatusAyuda = null;
+        try {
+            origenAyuda = OrigenAyuda.valueOf(search);
+            search = "";
+        }catch (Exception ex){
+            log.info("readAyudasByGenericFilter origenAyuda: " + origenAyuda);
+        }
+        try {
+            estatusAyuda = EstatusAyuda.valueOf(search);
+            search = "";
+        }catch (Exception ex){
+            log.info("readAyudasByGenericFilter estatusAyuda: " + estatusAyuda);
+        }
+        List<Ayuda> ayudas = ayudaRepository.findByFilter(estatusAyuda, origenAyuda, search);
+        response.setRecordsTotal(ayudas.size());
+        response.setRecordsFiltered(ayudas.size());
+        response.setDraw(pageRequest.getDraw());
+        int end = pageRequest.getStart() + pageRequest.getLength();
+        end = (ayudas.size() - 1) > end ? end : ayudas.size();
+        response.setData(AyudaMapper.from(ayudas.subList(pageRequest.getStart(), end)));
+        return response;
     }
 }

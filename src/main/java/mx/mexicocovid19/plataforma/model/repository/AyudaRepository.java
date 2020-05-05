@@ -51,4 +51,18 @@ public interface AyudaRepository extends JpaRepository<Ayuda, Integer> {
     @Query("select ayuda from Ayuda ayuda " +
             "where ayuda.estatusAyuda = :statusAyuda ")
     List<Ayuda> findByEstatusAyuda(@Param("statusAyuda") EstatusAyuda estatusAyuda);
+
+
+    @Query("select ayuda from Ayuda ayuda " +
+            "where " +
+            "   (ayuda.estatusAyuda = :statusAyuda or null = :statusAyuda) and " +
+            "   (ayuda.origenAyuda = :origenAyuda or null = :origenAyuda) and " +
+            "   (ayuda.tipoAyuda.nombre LIKE %:search% or " +
+            "    ayuda.descripcion LIKE %:search% or " +
+            "    ayuda.ciudadano.nombre LIKE %:search% or " +
+            "    ayuda.ciudadano.paterno LIKE %:search% or " +
+            "    ayuda.ciudadano.materno LIKE %:search%)")
+    List<Ayuda> findByFilter(@Param("statusAyuda") EstatusAyuda estatusAyuda,
+                             @Param("origenAyuda") OrigenAyuda origenAyuda,
+                             @Param("search") String search);
 }
