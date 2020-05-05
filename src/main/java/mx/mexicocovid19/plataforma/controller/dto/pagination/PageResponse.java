@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 public class PageResponse<T> {
     private int draw;
-    private int recordsFiltered;
-    private int recordsTotal;
+    private long recordsFiltered;
+    private long recordsTotal;
     private List<T> data;
 }

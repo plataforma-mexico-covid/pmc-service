@@ -5,6 +5,7 @@ import mx.mexicocovid19.plataforma.model.entity.OrigenAyuda
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Profile
+import org.springframework.data.domain.PageRequest
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -41,7 +42,7 @@ class AyudaRepositoryTest extends Specification {
     @Unroll("Escenario numero #index se buscan ayudas a menos de :kilometers km de :latitude / :longitude")
     def "Validar consulta de ayudas por filtro "() {
         expect:
-        total == ayudaRepository.findByFilter(estatusAyuda, origenAyuda, search).size()
+        total == ayudaRepository.findByFilter(estatusAyuda, origenAyuda, search, PageRequest.of(0, 12)).size()
 
         where:
         index   | estatusAyuda              | origenAyuda           | search        | total

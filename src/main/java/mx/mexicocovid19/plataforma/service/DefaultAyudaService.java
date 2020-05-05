@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import javax.mail.MessagingException;
-import javax.swing.plaf.IconUIResource;
 
 import com.google.gson.Gson;
 import mx.mexicocovid19.plataforma.controller.dto.AyudaDTO;
@@ -14,6 +13,7 @@ import mx.mexicocovid19.plataforma.controller.mapper.AyudaMapper;
 import mx.mexicocovid19.plataforma.model.entity.*;
 import mx.mexicocovid19.plataforma.model.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -263,13 +263,13 @@ public class DefaultAyudaService implements AyudaService {
         }catch (Exception ex){
             log.info("readAyudasByGenericFilter estatusAyuda: " + estatusAyuda);
         }
-        List<Ayuda> ayudas = ayudaRepository.findByFilter(estatusAyuda, origenAyuda, search);
-        response.setRecordsTotal(ayudas.size());
-        response.setRecordsFiltered(ayudas.size());
+        int page = (int) (pageRequest.getStart() / pageRequest.getLength());
+        int size = (int) pageRequest.getLength();
+        Page<Ayuda> ayudas = ayudaRepository.findByFilter(estatusAyuda, origenAyuda, search, org.springframework.data.domain.PageRequest.of(page, size));
+        response.setRecordsTotal(ayudas.getTotalElements());
+        response.setRecordsFiltered(ayudas.getTotalElements());
         response.setDraw(pageRequest.getDraw());
-        int end = pageRequest.getStart() + pageRequest.getLength();
-        end = (ayudas.size() - 1) > end ? end : ayudas.size();
-        response.setData(AyudaMapper.from(ayudas.subList(pageRequest.getStart(), end)));
+        response.setData(AyudaMapper.from(ayudas.getContent()));
         return response;
     }
 }

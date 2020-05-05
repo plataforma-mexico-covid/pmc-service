@@ -9,8 +9,8 @@ import java.util.List;
 @Setter
 public class PageRequest {
     private int draw;
-    private int length;
-    private int start;
+    private long length;
+    private long start;
     private List<PageOrderRequest> order;
     private PageSearchRequest search;
 }
