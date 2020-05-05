@@ -3,6 +3,7 @@ package mx.mexicocovid19.plataforma.controller.mapper;
 import mx.mexicocovid19.plataforma.controller.dto.AyudaDTO;
 import mx.mexicocovid19.plataforma.model.entity.Ayuda;
 import mx.mexicocovid19.plataforma.util.DateUtil;
+import mx.mexicocovid19.plataforma.util.Utils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ public class AyudaMapper {
         final AyudaDTO ayudaDTO = new AyudaDTO();
         ayudaDTO.setId(ayuda.getId());
         ayudaDTO.setDescripcion(ayuda.getDescripcion());
+        ayudaDTO.setDescCorta(Utils.truncateDescription(ayuda.getDescripcion(), 50));
         ayudaDTO.setCiudadano(CiudadanoMapper.from(ayuda.getCiudadano()));
         ayudaDTO.setUbicacion(AddressMapper.from(ayuda.getUbicacion()));
         ayudaDTO.setTipoAyuda(TipoAyudaMapper.from(ayuda.getTipoAyuda()));

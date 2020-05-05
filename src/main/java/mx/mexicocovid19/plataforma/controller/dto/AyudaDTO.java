@@ -10,6 +10,7 @@ import mx.mexicocovid19.plataforma.model.entity.OrigenAyuda;
 public class AyudaDTO {
     private Integer id;
     private String descripcion;
+    private String descCorta;
     private CiudadanoDTO ciudadano;
     private AddressDTO ubicacion;
     private TipoAyudaDTO tipoAyuda;

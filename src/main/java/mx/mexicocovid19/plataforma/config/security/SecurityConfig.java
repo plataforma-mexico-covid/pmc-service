@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -54,11 +55,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, ApiController.API_PATH_PUBLIC + "/**").permitAll()
                 .antMatchers(HttpMethod.POST, ApiController.API_PATH_PUBLIC + "/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, ApiController.API_PATH_PUBLIC + "/**").permitAll()
+                .antMatchers(HttpMethod.POST, ApiController.API_PATH_PRIVATE + "/backoffice/**").access("hasAnyRole('MANAGER')")
                 .antMatchers(HttpMethod.POST, ApiController.API_PATH_PRIVATE + "/**").authenticated()
                 .antMatchers(HttpMethod.PUT, ApiController.API_PATH_PRIVATE + "/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, ApiController.API_PATH_PRIVATE + "/**").authenticated()
                 .antMatchers(HttpMethod.POST, ApiController.API_PATH_PRIVATE + "/ayuda_ciudadano").access("hasAnyRole('VOLUNTARY','CHATBOT','LANDING')")
-                .antMatchers(HttpMethod.GET, ApiController.API_PATH_PRIVATE + "/backoffice").access("hasRole('MANAGER')")
                 .antMatchers("/h2-console/**").permitAll()
                 .and()
             .csrf()
@@ -85,5 +86,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder(){
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder;
+    }
+
+    @Bean
+    GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        return new GrantedAuthorityDefaults("");
     }
 }

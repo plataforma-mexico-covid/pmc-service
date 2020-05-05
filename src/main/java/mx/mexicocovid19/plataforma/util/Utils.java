@@ -27,6 +27,14 @@ public final class Utils {
 		throw new UnsupportedOperationException("No instanciar la clase");
 	}
 
+	public static String truncateDescription(final String description, int limit){
+		if (description == null)
+			return "";
+		if(description.length() > limit){
+			return description.substring(0, limit-4) + "...";
+		}
+		return description;
+	}
 
 	/**
 	 * Prints the error binding.
@@ -155,7 +163,7 @@ public final class Utils {
 	 * Esta funcion permite crear el error de respuesta a partir de una excepcion y
 	 * enviarla tambien al log.
 	 *
-	 * @param exception {@link BussinessException} excepcion que genero el error
+	 * @param exception {@link PMCException} excepcion que genero el error
 	 * @param nameClass {@link String} nombre de la clase que genero el error
 	 * @param status    {@link HttpStatus} estatus que se configurar como codigo
 	 *                  http

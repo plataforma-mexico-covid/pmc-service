@@ -202,7 +202,7 @@ INSERT INTO GEO_LOCATION (ID, CALLE, CODIGO_POSTAL, COLONIA, LATITUDE, LONGITUDE
 
 INSERT INTO AYUDA (ID, DESCRIPCION, CIUDADANO_ID, GEO_LOCATION_ID, TIPO_AYUDA_ID, ORIGEN_AYUDA, FECHA_REGISTRO, ACTIVE, ESTATUS_AYUDA) VALUES
 (1, 'Necesito ir a mi cita de hemodiálisis 16:00', 1, 1, 3, 'SOLICITA', TIMESTAMP '2020-03-20 00:00:00.000', 1, 'NUEVA'),
-(2, 'Necesito despensa basica', 2, 2, 1, 'SOLICITA', TIMESTAMP '2020-03-20 00:00:00.000', 1, 'PENDIENTE'),
+(2, 'Alimentos y accesorios de aseo personal y para el hogar Alimentos y accesorios de aseo personal y para el hogar', 2, 2, 1, 'SOLICITA', TIMESTAMP '2020-03-20 00:00:00.000', 1, 'PENDIENTE'),
 (3, 'Necesito ir a mi cita de hemodiálisis 16:00', 1, 11, 2, 'SOLICITA', TIMESTAMP '2020-03-20 00:00:00.000', 1, 'NUEVA'),
 (4, 'Necesito despensa basica', 2, 12, 4, 'SOLICITA', TIMESTAMP '2020-03-20 00:00:00.000', 1, 'PENDIENTE'),
 (5, 'Necesito ir a mi cita de hemodiálisis 16:00', 1, 13, 5, 'SOLICITA', TIMESTAMP '2020-03-20 00:00:00.000', 1, 'NUEVA'),
