@@ -50,6 +50,18 @@ public class AyudaMapper {
         return ayuda;
     }
 
+    public static Ayuda fromSimple(final AyudaDTO ayudaDTO) {
+        final Ayuda ayuda = new Ayuda();
+        ayuda.setId(ayudaDTO.getId());
+        ayuda.setDescripcion(ayudaDTO.getDescripcion());
+        ayuda.setTipoAyuda(TipoAyudaMapper.from(ayudaDTO.getTipoAyuda()));
+        ayuda.setOrigenAyuda(ayudaDTO.getOrigenAyuda());
+        ayuda.setCampania(ayudaDTO.getCampana());
+        ayuda.setMedio(ayudaDTO.getMedio());
+        ayuda.setOrigen(ayudaDTO.getOrigen());
+        return ayuda;
+    }
+
     public static List<AyudaDTO> fromAndMarkByUser(final List<Ayuda> ayudas, final String usernane) {
         return ayudas.stream().map(it -> AyudaMapper.from(it, usernane)).collect(Collectors.toList());
     }

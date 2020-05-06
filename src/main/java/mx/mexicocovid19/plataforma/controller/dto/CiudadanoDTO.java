@@ -12,5 +12,7 @@ public class CiudadanoDTO {
     private String nombre;
     private String paterno;
     private String materno;
+    private String nombreCompleto;
+    private String username;
     private List<CiudadanoContactoDTO> contactos;
 }

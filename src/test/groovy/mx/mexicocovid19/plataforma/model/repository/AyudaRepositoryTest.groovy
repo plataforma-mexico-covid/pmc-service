@@ -1,5 +1,6 @@
 package mx.mexicocovid19.plataforma.model.repository
 
+import mx.mexicocovid19.plataforma.model.entity.Ciudadano
 import mx.mexicocovid19.plataforma.model.entity.EstatusAyuda
 import mx.mexicocovid19.plataforma.model.entity.OrigenAyuda
 import org.springframework.beans.factory.annotation.Autowired
@@ -45,14 +46,29 @@ class AyudaRepositoryTest extends Specification {
         total == ayudaRepository.findByFilter(estatusAyuda, origenAyuda, search, PageRequest.of(0, 12)).size()
 
         where:
-        index   | estatusAyuda              | origenAyuda           | search        | total
-        0       | EstatusAyuda.PENDIENTE    | OrigenAyuda.SOLICITA  | ""            | 3
-        1       | EstatusAyuda.NUEVA        | OrigenAyuda.OFRECE    | ""            | 0
-        2       | EstatusAyuda.PENDIENTE    | OrigenAyuda.OFRECE    | ""            | 0
-        3       | EstatusAyuda.NUEVA        | OrigenAyuda.SOLICITA  | "hemodi"      | 5
-        4       | null                      | null                  | "hemodi"      | 6
-        5       | null                      | null                  | "Apoyo Legal" | 1
-        6       | EstatusAyuda.PENDIENTE    | null                  | ""            | 3
-        99      | null                      | null                  | ""            | 12
+        index   | estatusAyuda              | origenAyuda           | search                | total
+        0       | EstatusAyuda.PENDIENTE    | OrigenAyuda.SOLICITA  | ""                    | 3
+        1       | EstatusAyuda.NUEVA        | OrigenAyuda.OFRECE    | ""                    | 0
+        2       | EstatusAyuda.PENDIENTE    | OrigenAyuda.OFRECE    | ""                    | 0
+        3       | EstatusAyuda.NUEVA        | OrigenAyuda.SOLICITA  | "hemodi"              | 5
+        4       | null                      | null                  | "hemodi"              | 6
+        5       | null                      | null                  | "Apoyo Legal"         | 1
+        6       | EstatusAyuda.PENDIENTE    | null                  | ""                    | 3
+        7       | null                      | null                  | "23000"               | 1
+        8       | null                      | null                  | "citizen_uno@pmc.mx"  | 6
+        99      | null                      | null                  | ""                    | 12
+    }
+
+    @Unroll("Escenario numero #index se buscan ayudas del ciudadano #idCiudadano")
+    def "Validar consulta de ayudas por ciudadano "() {
+        expect:
+        def ciudadano = new Ciudadano()
+        ciudadano.setId(idCiudadano)
+        total == ayudaRepository.findByCiudadano(ciudadano).size()
+
+        where:
+        index   | idCiudadano   | total
+        0       | 1             | 6
+        1       | 2             | 6
     }
 }

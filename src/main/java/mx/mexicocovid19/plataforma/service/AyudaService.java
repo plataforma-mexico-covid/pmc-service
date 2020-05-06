@@ -17,8 +17,11 @@ public interface AyudaService {
     List<Ayuda> readAyudasByEstatusAyuda(String estatus);
     PageResponse<AyudaDTO> readAyudasByGenericFilter(final PageRequest search);
     Ayuda createAyuda(final Ayuda ayuda, final String username) throws PMCException;
+    Ayuda updateAyuda(final Ayuda ayuda, final User user) throws PMCException;
     Ayuda createAyudaAndCiudadano(final Ayuda ayuda) throws PMCException;
     void matchAyuda(final Integer idAyuda, final String username) throws MessagingException;
     String getOrigenByRole(final List<GrantedAuthority> roles, final String origen);
     void finishAyuda(final Integer idAyuda, final User user) throws PMCException;
+    void finishAyudaByContacto(final String contacto);
+    List<Ayuda> readAyudaByContacto(final String contacto);
 }

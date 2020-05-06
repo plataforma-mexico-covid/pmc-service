@@ -6,6 +6,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import lombok.extern.log4j.Log4j2;
+import mx.mexicocovid19.plataforma.controller.dto.FinalizarByMobileDTO;
 import mx.mexicocovid19.plataforma.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,12 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import mx.mexicocovid19.plataforma.ApiController;
 import mx.mexicocovid19.plataforma.config.security.JwtTokenUtil;
@@ -74,6 +70,17 @@ public class AyudaRestController {
     }
 
     @ResponseBody
+    @PutMapping(
+            value = { ApiController.API_PATH_PRIVATE + "/ayuda" },
+            produces = {"application/json;charset=UTF-8"})
+    public ResponseEntity<AyudaDTO> updateAyuda(@RequestBody AyudaDTO ayudaDTO, User user) throws PMCException {
+        Ayuda ayuda = ayudaService.updateAyuda(AyudaMapper.fromSimple(ayudaDTO), user);
+        ResponseEntity<AyudaDTO> response = new ResponseEntity<>(AyudaMapper.from(ayuda), HttpStatus.OK);
+
+        return response;
+    }
+
+    @ResponseBody
     @PostMapping(value = { ApiController.API_PATH_PRIVATE + "/ayuda_ciudadano" }, produces = {"application/json;charset=UTF-8"})
     public ResponseEntity<AyudaDTO> createAyudaWithCiudadano(@RequestBody AyudaDTO ayudaDTO, HttpServletRequest request) throws PMCException {
         String token = request.getHeader(this.tokenHeader);
@@ -101,8 +108,25 @@ public class AyudaRestController {
     @PostMapping(
             value = { ApiController.API_PATH_PRIVATE + "/ayuda/{ayuda}/finish" },
             produces = {"application/json;charset=UTF-8"})
-    public ResponseEntity<Void> finalizarAyuda(@PathVariable(value = "ayuda") Integer idAyuda, User user, HttpServletRequest request) throws PMCException {
+    public ResponseEntity<Void> finalizarAyuda(@PathVariable(value = "ayuda") Integer idAyuda, User user) throws PMCException {
         ayudaService.finishAyuda(idAyuda, user);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping(
+            value = { ApiController.API_PATH_PRIVATE + "/ayuda/contacto/finish" },
+            produces = {"application/json;charset=UTF-8"})
+    public ResponseEntity<Void> finalizarAyudaByMedioContacto(@RequestBody FinalizarByMobileDTO mobileDTO) throws PMCException {
+        ayudaService.finishAyudaByContacto(mobileDTO.getContacto());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping(
+            value = { ApiController.API_PATH_PRIVATE + "/ayuda/contacto" },
+            produces = {"application/json;charset=UTF-8"})
+    public List<AyudaDTO> getAyudaByMedioContacto(@RequestBody FinalizarByMobileDTO mobileDTO) throws PMCException {
+        return AyudaMapper.from(ayudaService.readAyudaByContacto(mobileDTO.getContacto()));
     }
 }

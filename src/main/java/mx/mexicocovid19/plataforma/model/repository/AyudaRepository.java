@@ -1,6 +1,7 @@
 package mx.mexicocovid19.plataforma.model.repository;
 
 import mx.mexicocovid19.plataforma.model.entity.Ayuda;
+import mx.mexicocovid19.plataforma.model.entity.Ciudadano;
 import mx.mexicocovid19.plataforma.model.entity.EstatusAyuda;
 import mx.mexicocovid19.plataforma.model.entity.OrigenAyuda;
 import org.springframework.data.domain.Page;
@@ -63,9 +64,13 @@ public interface AyudaRepository extends JpaRepository<Ayuda, Integer> {
             "    ayuda.descripcion LIKE %:search% or " +
             "    ayuda.ciudadano.nombre LIKE %:search% or " +
             "    ayuda.ciudadano.paterno LIKE %:search% or " +
-            "    ayuda.ciudadano.materno LIKE %:search%)")
+            "    ayuda.ciudadano.materno LIKE %:search% or " +
+            "    ayuda.ubicacion.codigoPostal LIKE %:search% or " +
+            "    ayuda.ciudadano.user.username LIKE %:search%)")
     Page<Ayuda> findByFilter(@Param("statusAyuda") EstatusAyuda estatusAyuda,
                              @Param("origenAyuda") OrigenAyuda origenAyuda,
                              @Param("search") String search,
                              Pageable pageable);
+
+    List<Ayuda> findByCiudadano(Ciudadano ciudadano);
 }

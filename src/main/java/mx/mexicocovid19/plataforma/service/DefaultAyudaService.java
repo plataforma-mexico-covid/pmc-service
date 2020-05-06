@@ -96,6 +96,25 @@ public class DefaultAyudaService implements AyudaService {
     }
 
     @Override
+    @Transactional
+    public Ayuda updateAyuda(Ayuda ayuda, User user) throws PMCException {
+        Ayuda ayudaSave = ayudaRepository.getOne(ayuda.getId());
+        if (!allowFinishAyuda(user, ayudaSave)){
+            log.info(ERR_USUARIO_AYUDA_NO_AUTORIZADO.getMessage());
+            throw new PMCException(ErrorEnum.ERR_GENERICO, "DefaultAyudaService", ERR_USUARIO_AYUDA_NO_AUTORIZADO.getMessage());
+        }
+        ayudaSave.setDescripcion(ayuda.getDescripcion());
+        ayudaSave.setOrigenAyuda(ayuda.getOrigenAyuda());
+        ayudaSave.setTipoAyuda(ayuda.getTipoAyuda());
+
+        if ( !GroseriasHelper.evaluarTexto(ayudaSave.getDescripcion()) ) {
+            return ayudaRepository.save(ayudaSave);
+        } else {
+            throw new PMCException(ErrorEnum.ERR_LENGUAJE_SOEZ, "DefaultAyudaService");
+        }
+    }
+
+    @Override
     public Ayuda createAyudaAndCiudadano(final Ayuda ayuda) throws PMCException {
         try {
             Ayuda ayudaStore = saveAyudaAndCiudadano(ayuda);
@@ -148,6 +167,30 @@ public class DefaultAyudaService implements AyudaService {
         }
         ayuda.setEstatusAyuda(EstatusAyuda.COMPLETEDA);
         ayudaRepository.save(ayuda);
+    }
+
+    @Override
+    @Transactional
+    public void finishAyudaByContacto(final String contacto) {
+        List<CiudadanoContacto> contactos = ciudadanoContactoRepository.findAllByContacto(contacto);
+        for (CiudadanoContacto ccontacto: contactos) {
+            List<Ayuda> ayudas = ayudaRepository.findByCiudadano(ccontacto.getCiudadano());
+            for (Ayuda ayuda: ayudas) {
+                ayuda.setEstatusAyuda(EstatusAyuda.COMPLETEDA);
+                ayudaRepository.save(ayuda);
+            }
+        }
+    }
+
+    @Override
+    public List<Ayuda> readAyudaByContacto(String contacto) {
+        List<Ayuda> result = new ArrayList<>();
+        List<CiudadanoContacto> contactos = ciudadanoContactoRepository.findAllByContacto(contacto);
+        for (CiudadanoContacto ccontacto: contactos) {
+            List<Ayuda> ayudas = ayudaRepository.findByCiudadano(ccontacto.getCiudadano());
+            result.addAll(ayudas);
+        }
+        return result;
     }
 
     @Transactional
