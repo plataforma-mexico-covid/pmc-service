@@ -9,7 +9,9 @@ import java.util.List;
 public class InfoSensibleMapper {
     public static InfoSensibleDTO from(final Ciudadano ciudadano, final List<Peticion> matchs) {
         InfoSensibleDTO dto = new InfoSensibleDTO();
-        dto.setUsername(ciudadano.getUser().getUsername());
+        if (ciudadano.getUser() != null){
+            dto.setUsername(ciudadano.getUser().getUsername());
+        }
         dto.setContactos(CiudadanoContactoMapper.from(ciudadano.getContactos()));
         dto.setMatchs(PeticionMapper.from(matchs));
         return dto;
