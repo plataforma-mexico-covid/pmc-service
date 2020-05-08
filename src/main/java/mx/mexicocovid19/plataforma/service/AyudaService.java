@@ -5,6 +5,7 @@ import java.util.List;
 import javax.mail.MessagingException;
 
 import mx.mexicocovid19.plataforma.controller.dto.AyudaDTO;
+import mx.mexicocovid19.plataforma.controller.dto.InfoSensibleDTO;
 import mx.mexicocovid19.plataforma.controller.dto.pagination.PageRequest;
 import mx.mexicocovid19.plataforma.controller.dto.pagination.PageResponse;
 import mx.mexicocovid19.plataforma.exception.PMCException;
@@ -24,4 +25,5 @@ public interface AyudaService {
     void finishAyuda(final Integer idAyuda, final User user) throws PMCException;
     void finishAyudaByContacto(final String contacto);
     List<Ayuda> readAyudaByContacto(final String contacto);
+    InfoSensibleDTO readSensitiveInfo(final Integer idAyuda);
 }

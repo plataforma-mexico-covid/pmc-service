@@ -26,7 +26,7 @@ class AyudaRepositoryTest extends Specification {
         index   | origenAyuda           | kilometers    | latitude  | longitude  | total
         0       | OrigenAyuda.SOLICITA  | 1             | 19.429386 | -99.158080 | 1
         1       | OrigenAyuda.SOLICITA  | 1             | 19.421728 | -99.148887 | 0
-        2       | OrigenAyuda.OFRECE    | 1             | 19.429386 | -99.158080 | 0
+        2       | OrigenAyuda.OFRECE    | 1             | 19.429386 | -99.158080 | 1
     }
 
     @Unroll("Escenario numero #index se buscan ayudas a menos de :kilometers km de :latitude / :longitude")
@@ -36,7 +36,7 @@ class AyudaRepositoryTest extends Specification {
 
         where:
         index   | kilometers    | latitude  | longitude  | total
-        0       | 1             | 19.429386 | -99.158080 | 1
+        0       | 1             | 19.429386 | -99.158080 | 2
         1       | 1             | 19.421728 | -99.148887 | 0
     }
 
@@ -48,7 +48,7 @@ class AyudaRepositoryTest extends Specification {
         where:
         index   | estatusAyuda              | origenAyuda           | search                | total
         0       | EstatusAyuda.PENDIENTE    | OrigenAyuda.SOLICITA  | ""                    | 3
-        1       | EstatusAyuda.NUEVA        | OrigenAyuda.OFRECE    | ""                    | 0
+        1       | EstatusAyuda.NUEVA        | OrigenAyuda.OFRECE    | ""                    | 1
         2       | EstatusAyuda.PENDIENTE    | OrigenAyuda.OFRECE    | ""                    | 0
         3       | EstatusAyuda.NUEVA        | OrigenAyuda.SOLICITA  | "hemodi"              | 5
         4       | null                      | null                  | "hemodi"              | 6
@@ -69,6 +69,6 @@ class AyudaRepositoryTest extends Specification {
         where:
         index   | idCiudadano   | total
         0       | 1             | 6
-        1       | 2             | 6
+        1       | 2             | 7
     }
 }

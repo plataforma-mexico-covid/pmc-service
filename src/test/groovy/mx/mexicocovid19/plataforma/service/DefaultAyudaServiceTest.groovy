@@ -22,8 +22,8 @@ class DefaultAyudaServiceTest extends Specification {
         index   | origenAyuda   | kilometers    | latitude  | longitude  | total
         0       | "SOLICITA"    | 1             | 19.429386 | -99.158080 | 1
         1       | "SOLICITA"    | 1             | 19.421728 | -99.148887 | 0
-        2       | "OFRECE"      | 1             | 19.429386 | -99.158080 | 0
-        3       | "AMBOS"       | 1             | 19.429386 | -99.158080 | 1
+        2       | "OFRECE"      | 1             | 19.429386 | -99.158080 | 1
+        3       | "AMBOS"       | 1             | 19.429386 | -99.158080 | 2
         4       | "AMBOS"       | 1             | 19.421728 | -99.148887 | 0
     }
     
@@ -35,6 +35,6 @@ class DefaultAyudaServiceTest extends Specification {
 
         where:
         index   | estatusAyuda	| total
-        0       | "NUEVA"		| 9
+        0       | "NUEVA"		| 10
     }
 }

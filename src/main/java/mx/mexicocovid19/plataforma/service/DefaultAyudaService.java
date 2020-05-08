@@ -7,9 +7,11 @@ import javax.mail.MessagingException;
 
 import com.google.gson.Gson;
 import mx.mexicocovid19.plataforma.controller.dto.AyudaDTO;
+import mx.mexicocovid19.plataforma.controller.dto.InfoSensibleDTO;
 import mx.mexicocovid19.plataforma.controller.dto.pagination.PageRequest;
 import mx.mexicocovid19.plataforma.controller.dto.pagination.PageResponse;
 import mx.mexicocovid19.plataforma.controller.mapper.AyudaMapper;
+import mx.mexicocovid19.plataforma.controller.mapper.InfoSensibleMapper;
 import mx.mexicocovid19.plataforma.model.entity.*;
 import mx.mexicocovid19.plataforma.model.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ public class DefaultAyudaService implements AyudaService {
 
     @Autowired
     private AyudaRepository ayudaRepository;
+
+    @Autowired
+    private PeticionRepository peticionRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -191,6 +196,13 @@ public class DefaultAyudaService implements AyudaService {
             result.addAll(ayudas);
         }
         return result;
+    }
+
+    @Override
+    public InfoSensibleDTO readSensitiveInfo(Integer idAyuda) {
+        Ayuda ayuda = ayudaRepository.getOne(idAyuda);
+        List<Peticion> matchs = peticionRepository.findAllByAyuda(ayuda);
+        return InfoSensibleMapper.from(ayuda.getCiudadano(), matchs);
     }
 
     @Transactional

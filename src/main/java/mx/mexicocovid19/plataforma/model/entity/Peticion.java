@@ -19,7 +19,7 @@ public class Peticion {
     @JoinColumn(name = "AYUDA_ID", nullable = false)
     private Ayuda ayuda;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CIUDADANO_ID", nullable = false)
+    @JoinColumn(name = "CIUDADANO_ID", nullable = true)
     private Ciudadano ciudadano;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "AYUDA_MATCH_ID", nullable = true)

@@ -2,6 +2,7 @@ package mx.mexicocovid19.plataforma.controller;
 
 import java.util.List;
 
+import mx.mexicocovid19.plataforma.controller.dto.InfoSensibleDTO;
 import mx.mexicocovid19.plataforma.controller.dto.pagination.PageRequest;
 import mx.mexicocovid19.plataforma.controller.dto.pagination.PageResponse;
 import mx.mexicocovid19.plataforma.exception.PMCException;
@@ -39,6 +40,15 @@ public class BackOfficeRestController {
     @PostMapping(value = { ApiController.API_PATH_PRIVATE + "/backoffice/ayuda" }, produces = {"application/json;charset=UTF-8"})
     public PageResponse<AyudaDTO> createAyuda(@RequestBody PageRequest pageRequest) throws PMCException {
         return ayudaService.readAyudasByGenericFilter(pageRequest);
+    }
+
+    @ResponseBody
+    @GetMapping(
+            value = { ApiController.API_PATH_PRIVATE + "/backoffice/ayuda/{ayuda}/sensitive" },
+            produces = {"application/json;charset=UTF-8"})
+    public InfoSensibleDTO readSensitiveInfoByAyuda(
+            @PathVariable(value = "ayuda") Integer idAyuda) {
+        return ayudaService.readSensitiveInfo(idAyuda);
     }
 
 }

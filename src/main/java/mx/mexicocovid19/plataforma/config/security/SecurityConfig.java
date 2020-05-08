@@ -55,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, ApiController.API_PATH_PUBLIC + "/**").permitAll()
                 .antMatchers(HttpMethod.POST, ApiController.API_PATH_PUBLIC + "/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, ApiController.API_PATH_PUBLIC + "/**").permitAll()
+                .antMatchers(HttpMethod.GET, ApiController.API_PATH_PRIVATE + "/backoffice/**").access("hasAnyRole('MANAGER')")
                 .antMatchers(HttpMethod.POST, ApiController.API_PATH_PRIVATE + "/backoffice/**").access("hasAnyRole('MANAGER')")
                 .antMatchers(HttpMethod.POST, ApiController.API_PATH_PRIVATE + "/ayuda_ciudadano").access("hasAnyRole('VOLUNTARY','CHATBOT','LANDING')")
                 .antMatchers(HttpMethod.POST, ApiController.API_PATH_PRIVATE + "/ayuda/contacto/**").access("hasAnyRole('VOLUNTARY','CHATBOT')")
