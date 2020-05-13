@@ -3,6 +3,7 @@ package mx.mexicocovid19.plataforma.controller.mapper;
 import mx.mexicocovid19.plataforma.controller.dto.VoluntarioDTO;
 import mx.mexicocovid19.plataforma.model.entity.User;
 import mx.mexicocovid19.plataforma.model.entity.Voluntario;
+import mx.mexicocovid19.plataforma.util.Utils;
 
 public class VoluntarioMapper {
 
@@ -26,7 +27,7 @@ public class VoluntarioMapper {
         voluntario.getCiudadano().setUser(user);
         voluntario.setUbicacion(AddressMapper.from(voluntarioDTO.getUbicacion()));
         voluntario.setDisciplina(DisciplinaMapper.from(voluntarioDTO.getDisciplina()));
-        voluntario.setDescripcion(voluntarioDTO.getDescripcion());
+        voluntario.setDescripcion(Utils.truncateDescription(voluntarioDTO.getDescripcion(), 1000));
         return voluntario;
     }
 }

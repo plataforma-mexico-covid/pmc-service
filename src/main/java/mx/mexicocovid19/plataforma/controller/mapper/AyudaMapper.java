@@ -37,7 +37,7 @@ public class AyudaMapper {
 
     public static Ayuda from(final AyudaDTO ayudaDTO) {
         final Ayuda ayuda = new Ayuda();
-        ayuda.setDescripcion(ayudaDTO.getDescripcion());
+        ayuda.setDescripcion(Utils.truncateDescription(ayudaDTO.getDescripcion(), 1000));
         ayuda.setCiudadano(CiudadanoMapper.from(ayudaDTO.getCiudadano()));
         ayuda.setUbicacion(AddressMapper.from(ayudaDTO.getUbicacion()));
         ayuda.setTipoAyuda(TipoAyudaMapper.from(ayudaDTO.getTipoAyuda()));
@@ -53,7 +53,7 @@ public class AyudaMapper {
     public static Ayuda fromSimple(final AyudaDTO ayudaDTO) {
         final Ayuda ayuda = new Ayuda();
         ayuda.setId(ayudaDTO.getId());
-        ayuda.setDescripcion(ayudaDTO.getDescripcion());
+        ayuda.setDescripcion(Utils.truncateDescription(ayudaDTO.getDescripcion(), 1000));
         ayuda.setTipoAyuda(TipoAyudaMapper.from(ayudaDTO.getTipoAyuda()));
         ayuda.setOrigenAyuda(ayudaDTO.getOrigenAyuda());
         ayuda.setCampania(ayudaDTO.getCampana());
