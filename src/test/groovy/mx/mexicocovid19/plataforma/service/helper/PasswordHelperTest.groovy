@@ -14,7 +14,7 @@ class PasswordHelperTest extends Specification {
         index 	| input 						| output
         0 		| "mypassword"   				| false
         1 		| "00000000"          			| false
-        2 		| "AlphaRomeo4c"      			| false
+        2 		| "AlphaRomeo4c"      			| true
         3 		| "fiatlinea2014"     			| false
         4 		| "F@rd1co"           			| false
 		5 		| "F@rd1coSports"				| true
