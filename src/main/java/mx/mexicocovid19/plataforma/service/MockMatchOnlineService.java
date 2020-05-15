@@ -19,4 +19,9 @@ public class MockMatchOnlineService implements MatchOnlineService {
     public void verifyMatchManual(Ayuda ayuda, Ciudadano ciudadano) {
 
     }
+
+    @Override
+    public void sendMessage(String numero, String message) {
+
+    }
 }

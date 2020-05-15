@@ -56,6 +56,29 @@ public class AnalizerMatchOnlineService implements MatchOnlineService {
         }
     }
 
+    @Override
+    public void sendMessage(String numero, String message) {
+        log.info("sendMessage: " + this.analizerUrl + " numero: " + numero + " message: " + message);
+        try{
+            Map<String, Object> request = createRequestSendMessage(numero, message);
+            ResponseEntity<Void> response
+                    = restTemplate.postForEntity(this.analizerUrl + "/api/v1/internal/notification/send", request, Void.class);
+            log.info("INFO sendMessage: " + numero + " message: " + message + " status: " + response.getStatusCode() + " request: " + new Gson().toJson(request));
+            if (response.getStatusCode() == HttpStatus.CREATED)
+                return;
+            log.info("FAIL sendMessage: " + numero + " message: " + message + " status: " + response.getStatusCode() + " request: " + new Gson().toJson(request));
+        } catch (Exception ex) {
+            log.error("FAIL Match Ayuda Online: " + ex.getMessage());
+        }
+    }
+
+    private Map<String, Object> createRequestSendMessage(final String numero, final String message){
+        Map<String, Object> request = new HashMap<>();
+        request.put("numero", numero);
+        request.put("message", message);
+        return request;
+    }
+
     private Map<String, Object> createRequestMatchManual(final Ayuda ayuda, final Ciudadano ciudadano){
         Map<String, Object> request = new HashMap<>();
         request.put("ayudaId", ayuda.getId());

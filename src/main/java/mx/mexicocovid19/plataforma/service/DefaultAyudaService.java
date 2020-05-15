@@ -2,6 +2,7 @@ package mx.mexicocovid19.plataforma.service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.mail.MessagingException;
 
@@ -226,17 +227,24 @@ public class DefaultAyudaService implements AyudaService {
     private Ayuda saveAyudaAndCiudadano(final Ayuda ayuda) throws PMCException {
         try {
             Set<CiudadanoContacto> contactos = ayuda.getCiudadano().getContactos();
-            Ciudadano ciudadano = ayuda.getCiudadano();
-            ciudadano.setContactos(null);
-            ciudadano.setActive(true);
-            Ciudadano ciudadanoSave = ciudadanoRepository.save(ayuda.getCiudadano());
-            contactos.forEach(it -> {
-                it.setCiudadano(ciudadanoSave);
-                ciudadanoContactoRepository.save(it);
-            });
+            Ciudadano ciudadano = null;
+            for (CiudadanoContacto it: contactos) {
+                List<CiudadanoContacto> cc = ciudadanoContactoRepository.findAllByContacto(it.getContacto());
+                if (cc == null || cc.size() == 0) {
+                    if (ciudadano == null) {
+                        ciudadano = saveCiudadadoByContacto(ayuda.getCiudadano(), it.getContacto());
+                    }
+
+                    it.setCiudadano(ciudadano);
+                    ciudadanoContactoRepository.save(it);
+                } else if (cc != null && cc.size() > 0 ){
+                    ciudadano = cc.get(0).getCiudadano();
+                }
+            }
+
             GeoLocation location = geoLocationRepository.save(fillGeoLocation(ayuda.getUbicacion()));
             ayuda.setFechaRegistro(LocalDateTime.now());
-            ayuda.setCiudadano(ciudadanoSave);
+            ayuda.setCiudadano(ciudadano);
             ayuda.setUbicacion(location);
             ayuda.setEstatusAyuda(EstatusAyuda.NUEVA);
             ayuda.setActive(true);
@@ -245,6 +253,19 @@ public class DefaultAyudaService implements AyudaService {
             log.info(e.getMessage());
             throw new PMCException(ErrorEnum.ERR_GENERICO, "DefaultAyudaService saveAyudaAndCiudadano", e.getMessage());
         }
+    }
+
+    private Ciudadano saveCiudadadoByContacto(final Ciudadano ciudadano, final String contacto) {
+        User user = userRepository.findByUsername(contacto);
+        if (user != null) {
+            Ciudadano ciudadanoStore = ciudadanoRepository.findByUser(user);
+            if (ciudadanoStore != null) return ciudadanoStore;
+        }
+
+        ciudadano.setContactos(null);
+        ciudadano.setActive(true);
+        ciudadano.setUser(user);
+        return ciudadanoRepository.save(ciudadano);
     }
 
     private GeoLocation fillGeoLocation(GeoLocation geoLocation){
