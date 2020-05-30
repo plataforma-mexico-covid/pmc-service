@@ -50,7 +50,7 @@ public class OfertaRestController {
 
     @ResponseBody
     @PostMapping(
-            value = { ApiController.API_PATH_PRIVATE + "/{oferta}/finish" },
+            value = { "/{oferta}/finish" },
             produces = {"application/json;charset=UTF-8"})
     public ResponseEntity<Void> finalizarOferta(@PathVariable(value = "oferta") Integer idOferta, User user) throws PMCException {
         ofertaService.finishOferta(idOferta, user);
