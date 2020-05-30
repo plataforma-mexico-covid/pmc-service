@@ -8,6 +8,7 @@ public enum TipoEmailEnum {
     MATCH_AYUDA("email/matchAyuda.vm", "¡Es momento de hacer equipo!"),
     RECUPERACION_PASSWORD("email/recoveryPassword.vm", "Recuperar password"),
 
+    MATCH_OFERTA("email/matchOferta.vm", "¡Es momento de hacer equipo!"),
     REGISTRO_OFERTA("email/registroOferta.vm", "¡Recibimos tu oferta!");
 
     private String template;

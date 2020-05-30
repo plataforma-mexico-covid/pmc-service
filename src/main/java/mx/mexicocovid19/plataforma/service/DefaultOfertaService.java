@@ -19,6 +19,7 @@ import javax.mail.MessagingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static mx.mexicocovid19.plataforma.service.TipoEmailEnum.*;
 import static mx.mexicocovid19.plataforma.util.ErrorEnum.ERR_USUARIO_AYUDA_NO_AUTORIZADO;
@@ -77,8 +78,28 @@ public class DefaultOfertaService implements OfertaService {
     }
 
     @Override
+    public void matchOferta(Integer idOferta, String username) throws MessagingException {
+        Oferta oferta = saveMatchOferta(idOferta);
+        User user = new User();
+        user.setUsername(username);
+        Optional<Ciudadano> ciudadanoAyuda = ciudadanoRepository.findById(oferta.getCiudadano().getId());
+        Ciudadano ciudadano = ciudadanoRepository.findByUser(user);
+        Map<String, Object> props = createInfoToEmail(oferta, ciudadanoAyuda.get(), ciudadano);
+        String to = ciudadanoAyuda.get().getUser() != null? ciudadanoAyuda.get().getUser().getUsername() : user.getUsername();
+        String cc = ciudadanoAyuda.get().getUser() != null? user.getUsername() : null;
+        mailService.send(to, cc, props, MATCH_OFERTA);
+    }
+
+    @Override
     public PageResponse<OfertaDTO> readOfertasByGenericFilter(PageRequest search) {
         return null;
+    }
+
+    @Transactional
+    private Oferta saveMatchOferta(Integer idOferta) {
+        Oferta oferta = ofertaRepository.getOne(idOferta);
+        oferta.setEstatusOferta(EstatusAyuda.EN_PROGRESO);
+        return ofertaRepository.save(oferta);
     }
 
     @Transactional
@@ -95,6 +116,25 @@ public class DefaultOfertaService implements OfertaService {
         } else {
             throw new PMCException(ErrorEnum.ERR_LENGUAJE_SOEZ, "DefaultAyudaService");
         }
+    }
+
+    private Map<String, Object> createInfoToEmail(Oferta oferta, Ciudadano ofrece, Ciudadano solicita){
+        String contactoOfrece = ofrece.getContactos().stream()
+                .map(contacto -> contacto.getTipoContacto() + " : " + contacto.getContacto() + " ")
+                .reduce("", (partialString, element) -> partialString + element);
+        String contactoSolicita = solicita.getContactos().stream()
+                .map(contacto -> contacto.getTipoContacto() + " : " + contacto.getContacto() + " ")
+                .reduce("", (partialString, element) -> partialString + element);
+        Map<String, Object> props = new HashMap<>();
+        props.put("oferta", oferta.getNombre());
+        props.put("oferta-desc", oferta.getDescripcion());
+        props.put("nombre-ofrece", ofrece.getNombreCompleto());
+        props.put("email-ofrece", ofrece.getUser() != null ? ofrece.getUser().getUsername() : "N/A");
+        props.put("contacto-ofrece", contactoOfrece);
+        props.put("nombre-solicita", solicita.getNombreCompleto());
+        props.put("email-solicita", solicita.getUser() != null ? solicita.getUser().getUsername() : "N/A");
+        props.put("contacto-solicita", contactoSolicita);
+        return props;
     }
 
     private boolean allowFinishOferta(final User user, final Oferta oferta) {

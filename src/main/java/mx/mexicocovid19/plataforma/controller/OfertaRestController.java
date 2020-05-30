@@ -3,6 +3,7 @@ package mx.mexicocovid19.plataforma.controller;
 import lombok.extern.log4j.Log4j2;
 import mx.mexicocovid19.plataforma.ApiController;
 import mx.mexicocovid19.plataforma.config.security.JwtTokenUtil;
+import mx.mexicocovid19.plataforma.controller.dto.MatchDTO;
 import mx.mexicocovid19.plataforma.controller.dto.OfertaDTO;
 import mx.mexicocovid19.plataforma.controller.mapper.OfertaMapper;
 import mx.mexicocovid19.plataforma.exception.PMCException;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -46,6 +49,15 @@ public class OfertaRestController {
 		response = new ResponseEntity<OfertaDTO>(OfertaMapper.from(createOferta), HttpStatus.OK);
         
         return response;
+    }
+
+    @ResponseBody
+    @PostMapping(
+            value = { "/{oferta}/match" },
+            produces = {"application/json;charset=UTF-8"})
+    public ResponseEntity<Void> matchOferta(@PathVariable(value = "oferta") Integer idOferta, @RequestBody MatchDTO matchDTO) throws MessagingException {
+        ofertaService.matchOferta(idOferta, matchDTO.getUsername());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ResponseBody
