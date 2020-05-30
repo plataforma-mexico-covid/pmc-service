@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import static mx.mexicocovid19.plataforma.service.TipoEmailEnum.*;
+import static mx.mexicocovid19.plataforma.util.ErrorEnum.ERR_USUARIO_AYUDA_NO_AUTORIZADO;
 
 @Log4j2
 @Service
@@ -65,6 +66,17 @@ public class DefaultOfertaService implements OfertaService {
     }
 
     @Override
+    public void finishOferta(Integer idOferta, User user) throws PMCException {
+        Oferta oferta = ofertaRepository.getOne(idOferta);
+        if (!allowFinishOferta(user, oferta)){
+            log.info(ERR_USUARIO_AYUDA_NO_AUTORIZADO.getMessage());
+            throw new PMCException(ErrorEnum.ERR_GENERICO, "DefaultAyudaService", ERR_USUARIO_AYUDA_NO_AUTORIZADO.getMessage());
+        }
+        oferta.setEstatusOferta(EstatusAyuda.COMPLETEDA);
+        ofertaRepository.save(oferta);
+    }
+
+    @Override
     public PageResponse<OfertaDTO> readOfertasByGenericFilter(PageRequest search) {
         return null;
     }
@@ -83,5 +95,15 @@ public class DefaultOfertaService implements OfertaService {
         } else {
             throw new PMCException(ErrorEnum.ERR_LENGUAJE_SOEZ, "DefaultAyudaService");
         }
+    }
+
+    private boolean allowFinishOferta(final User user, final Oferta oferta) {
+        Ciudadano ciudadano = ciudadanoRepository.findByUser(user);
+        for (UserRole role: user.getUserRole()) {
+            if(role.getRole()==Role.MANAGER || role.getRole()==Role.VOLUNTARY) {
+                return true;
+            }
+        }
+        return oferta.getCiudadano().getId() == ciudadano.getId();
     }
 }

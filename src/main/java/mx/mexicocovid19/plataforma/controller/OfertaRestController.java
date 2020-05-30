@@ -7,6 +7,7 @@ import mx.mexicocovid19.plataforma.controller.dto.OfertaDTO;
 import mx.mexicocovid19.plataforma.controller.mapper.OfertaMapper;
 import mx.mexicocovid19.plataforma.exception.PMCException;
 import mx.mexicocovid19.plataforma.model.entity.Oferta;
+import mx.mexicocovid19.plataforma.model.entity.User;
 import mx.mexicocovid19.plataforma.service.OfertaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,5 +46,14 @@ public class OfertaRestController {
 		response = new ResponseEntity<OfertaDTO>(OfertaMapper.from(createOferta), HttpStatus.OK);
         
         return response;
+    }
+
+    @ResponseBody
+    @PostMapping(
+            value = { ApiController.API_PATH_PRIVATE + "/{oferta}/finish" },
+            produces = {"application/json;charset=UTF-8"})
+    public ResponseEntity<Void> finalizarOferta(@PathVariable(value = "oferta") Integer idOferta, User user) throws PMCException {
+        ofertaService.finishOferta(idOferta, user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
