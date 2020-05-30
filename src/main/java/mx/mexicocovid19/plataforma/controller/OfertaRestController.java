@@ -55,8 +55,8 @@ public class OfertaRestController {
     @PostMapping(
             value = { "/{oferta}/match" },
             produces = {"application/json;charset=UTF-8"})
-    public ResponseEntity<Void> matchOferta(@PathVariable(value = "oferta") Integer idOferta, @RequestBody MatchDTO matchDTO) throws MessagingException {
-        ofertaService.matchOferta(idOferta, matchDTO.getUsername());
+    public ResponseEntity<Void> matchOferta(@PathVariable(value = "oferta") Integer idOferta, @RequestBody MatchDTO matchDTO, User user) throws MessagingException {
+        ofertaService.matchOferta(idOferta, user.getUsername());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -99,8 +99,8 @@ public class AyudaRestController {
     @PostMapping(
             value = { ApiController.API_PATH_PRIVATE + "/ayuda/{ayuda}/match" },
             produces = {"application/json;charset=UTF-8"})
-    public ResponseEntity<Void> matchAyuda(@PathVariable(value = "ayuda") Integer idAyuda, @RequestBody MatchDTO matchDTO) throws MessagingException {
-        ayudaService.matchAyuda(idAyuda, matchDTO.getUsername());
+    public ResponseEntity<Void> matchAyuda(@PathVariable(value = "ayuda") Integer idAyuda, @RequestBody MatchDTO matchDTO, User user) throws MessagingException {
+        ayudaService.matchAyuda(idAyuda, user.getUsername());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
