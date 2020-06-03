@@ -34,6 +34,7 @@ public class OfertaMapper {
 
     public static Oferta from(final OfertaDTO ofertaDTO) {
         final Oferta oferta = new Oferta();
+        oferta.setNombre(Utils.truncateDescription(ofertaDTO.getNombre(), 200));
         oferta.setDescripcion(Utils.truncateDescription(ofertaDTO.getDescripcion(), 1000));
         oferta.setCiudadano(CiudadanoMapper.from(ofertaDTO.getCiudadano()));
         oferta.setUbicacion(AddressMapper.from(ofertaDTO.getUbicacion()));
